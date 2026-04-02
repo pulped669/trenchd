@@ -1,22 +1,39 @@
 @import "tailwindcss";
-@import "@solana/wallet-adapter-react-ui/styles.css";
 
 :root {
-  --bg: #0b1120;
-  --fg: #e2e8f0;
-  --accent: #ff2a6d;
-  --muted: #64748b;
-  --surface: rgba(15, 23, 42, 0.7);
-  --border: rgba(148, 163, 184, 0.08);
+  --bg: #ffffff;
+  --bg-secondary: #f8f8fa;
+  --fg: #111111;
+  --fg-secondary: #555555;
+  --fg-muted: #999999;
+  --accent: #720eec;
+  --accent-light: #8b3cf0;
+  --border: #ebebeb;
+  --card: #ffffff;
+}
+
+.dark {
+  --bg: #111111;
+  --bg-secondary: #1a1a1a;
+  --fg: #f0f0f0;
+  --fg-secondary: #aaaaaa;
+  --fg-muted: #666666;
+  --accent: #8b3cf0;
+  --accent-light: #a55ff5;
+  --border: #222222;
+  --card: #1a1a1a;
 }
 
 @theme inline {
   --color-bg: var(--bg);
+  --color-bg-secondary: var(--bg-secondary);
   --color-fg: var(--fg);
+  --color-fg-secondary: var(--fg-secondary);
+  --color-fg-muted: var(--fg-muted);
   --color-accent: var(--accent);
-  --color-muted: var(--muted);
-  --color-surface: var(--surface);
+  --color-accent-light: var(--accent-light);
   --color-border: var(--border);
+  --color-card: var(--card);
   --font-sans: var(--font-inter);
 }
 
@@ -25,25 +42,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html { background: #0b1120; }
-
 body {
-  background: transparent;
+  background: var(--bg);
   color: var(--fg);
   font-family: var(--font-sans), -apple-system, system-ui, sans-serif;
-  overflow-x: hidden;
 }
 
 ::selection {
-  background: rgba(56, 189, 248, 0.2);
-  color: #f8fafc;
+  background: rgba(114, 14, 236, 0.15);
 }
-
-::-webkit-scrollbar { width: 0px; }
-
-@keyframes shimmer {
-  0% { background-position: 200% center; }
-  100% { background-position: -200% center; }
-}
-
-.wallet-adapter-button { font-family: inherit !important; }
