@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ARTICLES } from "@/lib/articles";
 import { ArticleHero } from "@/components/ArticleCard";
-import Newsletter from "@/components/Newsletter";
 
 export default function Home() {
   const hero = ARTICLES[0];
@@ -95,8 +94,6 @@ export default function Home() {
 
         {/* Sidebar */}
         <aside className="w-full shrink-0 space-y-5 lg:w-64">
-          <Newsletter />
-
           {/* Trending */}
           <div className="rounded-2xl border border-border bg-card p-5">
             <h3 className="text-[12px] font-bold uppercase tracking-widest text-fg-muted">

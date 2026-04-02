@@ -106,22 +106,6 @@ export default function ArticlePage({
         </p>
       </article>
 
-      {/* Newsletter */}
-      <div className="mt-10 rounded-2xl border border-border bg-bg-secondary/50 p-6 text-center">
-        <p className="text-[15px] font-semibold text-fg">Enjoy this article?</p>
-        <p className="mt-1 text-[13px] text-fg-secondary">Get stories like this delivered to your inbox.</p>
-        <form className="mx-auto mt-4 flex max-w-sm gap-2">
-          <input
-            type="email"
-            placeholder="you@email.com"
-            className="flex-1 rounded-lg border border-border bg-bg px-3 py-2.5 text-[13px] text-fg placeholder-fg-muted outline-none focus:border-accent"
-          />
-          <button className="shrink-0 rounded-lg bg-accent px-5 py-2.5 text-[13px] font-semibold text-white hover:opacity-90">
-            Subscribe
-          </button>
-        </form>
-      </div>
-
       {/* Related Articles */}
       <section className="mt-10 border-t border-border pt-8">
         <h2 className="text-[12px] font-bold uppercase tracking-widest text-fg-muted">Related Articles</h2>

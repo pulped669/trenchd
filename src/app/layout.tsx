@@ -32,6 +32,24 @@ export default function RootLayout({
       <body>
         <Navbar />
         {children}
+        {/* Newsletter */}
+        <div className="border-t border-border bg-bg-secondary/50">
+          <div className="mx-auto max-w-6xl px-4 py-12 text-center">
+            <p className="text-[17px] font-bold text-fg">Stay ahead of the market</p>
+            <p className="mt-1 text-[13px] text-fg-secondary">Top crypto stories delivered to your inbox daily. No spam.</p>
+            <form className="mx-auto mt-5 flex max-w-sm gap-2">
+              <input
+                type="email"
+                placeholder="you@email.com"
+                className="flex-1 rounded-lg border border-border bg-bg px-3 py-2.5 text-[13px] text-fg placeholder-fg-muted outline-none transition-colors focus:border-accent"
+              />
+              <button className="shrink-0 rounded-lg bg-accent px-5 py-2.5 text-[13px] font-semibold text-white hover:opacity-90">
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+
         <footer className="border-t border-border bg-bg-secondary/50">
           <div className="mx-auto max-w-6xl px-4 py-10">
             <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
