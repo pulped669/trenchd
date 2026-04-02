@@ -12,9 +12,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "trenchd — launch tokens on Solana",
+  title: "TRENCHD — Autonomous Solana Trading",
   description:
-    "The fastest way to create and trade tokens on Solana. Fair launch bonding curves with automatic DEX graduation.",
+    "Fully autonomous Solana trading bot. Choose your strategy, set your risk, and let it run 24/7.",
 };
 
 export default function RootLayout({
@@ -33,11 +33,13 @@ export default function RootLayout({
             position="bottom-right"
             toastOptions={{
               style: {
-                background: "rgba(17, 17, 19, 0.9)",
-                color: "#f5f5f7",
-                border: "1px solid rgba(255,255,255,0.06)",
+                background: "rgba(18, 0, 37, 0.95)",
+                color: "#f0e6ff",
+                border: "1px solid rgba(5, 217, 232, 0.15)",
                 backdropFilter: "blur(20px)",
-                borderRadius: "12px",
+                borderRadius: "4px",
+                fontFamily: "monospace",
+                fontSize: "13px",
               },
             }}
           />

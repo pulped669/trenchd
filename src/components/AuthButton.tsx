@@ -7,7 +7,7 @@ export default function AuthButton() {
 
   if (status === "loading") {
     return (
-      <div className="h-8 w-20 animate-pulse rounded-lg bg-white/[0.04]" />
+      <div className="h-8 w-20 animate-pulse rounded bg-cyan/5" />
     );
   }
 
@@ -15,14 +15,10 @@ export default function AuthButton() {
     return (
       <button
         onClick={() => signOut()}
-        className="flex items-center gap-2 rounded-lg border border-border bg-surface-light px-3.5 py-1.5 text-[13px] font-medium text-foreground transition-all hover:bg-surface-hover"
+        className="flex items-center gap-2 rounded border border-cyan/20 bg-cyan/5 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-wider text-cyan transition-all hover:bg-cyan/10 hover:glow-cyan"
       >
         {session.user.image && (
-          <img
-            src={session.user.image}
-            alt=""
-            className="h-4 w-4 rounded-full"
-          />
+          <img src={session.user.image} alt="" className="h-4 w-4 rounded-full" />
         )}
         <span className="max-w-[80px] truncate">{session.user.name}</span>
       </button>
@@ -32,9 +28,9 @@ export default function AuthButton() {
   return (
     <button
       onClick={() => signIn("twitter")}
-      className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-1.5 text-[13px] font-semibold text-white transition-all hover:bg-accent-light"
+      className="glow-pink rounded border border-pink/30 bg-pink/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-pink transition-all hover:bg-pink/20"
     >
-      Get Started
+      Connect
     </button>
   );
 }

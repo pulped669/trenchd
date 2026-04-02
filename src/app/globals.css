@@ -1,89 +1,206 @@
 @import "tailwindcss";
 @import "@solana/wallet-adapter-react-ui/styles.css";
+@import "@fontsource/press-start-2p";
 
 :root {
-  --background: #06060a;
-  --foreground: #e8e8ed;
-  --accent: #6366f1;
-  --accent-light: #818cf8;
-  --accent-glow: rgba(99, 102, 241, 0.15);
-  --green: #22c55e;
-  --red: #ef4444;
-  --surface: #0c0c12;
-  --surface-light: #12121a;
-  --surface-hover: #16161f;
-  --border: rgba(255, 255, 255, 0.06);
-  --border-light: rgba(255, 255, 255, 0.1);
-  --muted: #6b6b80;
+  --background: #0a0015;
+  --foreground: #f0e6ff;
+  --pink: #ff2a6d;
+  --cyan: #05d9e8;
+  --purple: #9b5de5;
+  --yellow: #f5e642;
+  --orange: #ff6b2b;
+  --surface: #120025;
+  --surface-light: #1a0035;
+  --border: rgba(5, 217, 232, 0.12);
+  --muted: #7b6b8a;
+  --green: #39ff14;
+  --red: #ff2a6d;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
-  --color-accent-light: var(--accent-light);
-  --color-accent-glow: var(--accent-glow);
-  --color-green: var(--green);
-  --color-red: var(--red);
+  --color-pink: var(--pink);
+  --color-cyan: var(--cyan);
+  --color-purple: var(--purple);
+  --color-yellow: var(--yellow);
+  --color-orange: var(--orange);
   --color-surface: var(--surface);
   --color-surface-light: var(--surface-light);
-  --color-surface-hover: var(--surface-hover);
   --color-border: var(--border);
-  --color-border-light: var(--border-light);
   --color-muted: var(--muted);
+  --color-green: var(--green);
+  --color-red: var(--red);
   --font-sans: var(--font-inter);
-  --font-mono: var(--font-mono);
-}
-
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --font-pixel: "Press Start 2P", monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  overflow-x: hidden;
 }
 
 ::selection {
-  background: rgba(99, 102, 241, 0.25);
+  background: rgba(255, 42, 109, 0.35);
   color: #fff;
 }
 
-.glow {
+/* Scanlines overlay */
+.scanlines::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.08) 0px,
+    rgba(0, 0, 0, 0.08) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* Perspective grid floor */
+.grid-floor {
+  position: absolute;
+  bottom: 0;
+  left: -50%;
+  right: -50%;
+  height: 50%;
+  background:
+    linear-gradient(transparent 65%, rgba(5, 217, 232, 0.06) 100%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(5, 217, 232, 0.08) 0px,
+      rgba(5, 217, 232, 0.08) 1px,
+      transparent 1px,
+      transparent 80px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(5, 217, 232, 0.05) 0px,
+      rgba(5, 217, 232, 0.05) 1px,
+      transparent 1px,
+      transparent 80px
+    );
+  transform: perspective(500px) rotateX(60deg);
+  transform-origin: center top;
+}
+
+/* Neon text glow */
+.neon-pink {
+  text-shadow:
+    0 0 7px #ff2a6d,
+    0 0 20px #ff2a6d,
+    0 0 42px #ff2a6d80;
+}
+
+.neon-cyan {
+  text-shadow:
+    0 0 7px #05d9e8,
+    0 0 20px #05d9e8,
+    0 0 42px #05d9e880;
+}
+
+.neon-purple {
+  text-shadow:
+    0 0 7px #9b5de5,
+    0 0 20px #9b5de5,
+    0 0 42px #9b5de580;
+}
+
+/* Box neon glow */
+.glow-pink {
   box-shadow:
-    0 0 20px rgba(99, 102, 241, 0.2),
-    0 0 60px rgba(99, 102, 241, 0.06);
+    0 0 15px rgba(255, 42, 109, 0.3),
+    0 0 45px rgba(255, 42, 109, 0.1),
+    inset 0 0 15px rgba(255, 42, 109, 0.05);
 }
 
-.glow-sm {
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.12);
+.glow-cyan {
+  box-shadow:
+    0 0 15px rgba(5, 217, 232, 0.3),
+    0 0 45px rgba(5, 217, 232, 0.1),
+    inset 0 0 15px rgba(5, 217, 232, 0.05);
 }
 
-.text-gradient {
-  background: linear-gradient(135deg, #818cf8 0%, #6366f1 40%, #a78bfa 100%);
+/* Chrome text */
+.chrome-text {
+  background: linear-gradient(
+    180deg,
+    #fff 0%,
+    #e0d0ff 25%,
+    #9b5de5 50%,
+    #ff2a6d 75%,
+    #ff6b2b 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(155, 93, 229, 0.4));
 }
 
-.bg-grid {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-  background-size: 48px 48px;
+/* Sunset gradient */
+.sunset-gradient {
+  background: linear-gradient(
+    180deg,
+    #ff2a6d 0%,
+    #ff6b2b 30%,
+    #f5e642 60%,
+    #9b5de5 100%
+  );
 }
 
-.bg-radial-hero {
-  background:
-    radial-gradient(ellipse 70% 50% at 50% -10%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 30% at 75% 0%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+/* Glitch effect */
+@keyframes glitch-1 {
+  0%, 100% { clip-path: inset(20% 0 60% 0); transform: translate(-2px, 1px); }
+  25% { clip-path: inset(50% 0 20% 0); transform: translate(2px, -1px); }
+  50% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 2px); }
+  75% { clip-path: inset(60% 0 10% 0); transform: translate(1px, -2px); }
 }
 
-@keyframes pulse-line {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
+@keyframes glitch-2 {
+  0%, 100% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
+  25% { clip-path: inset(10% 0 70% 0); transform: translate(-2px, 1px); }
+  50% { clip-path: inset(50% 0 20% 0); transform: translate(1px, -2px); }
+  75% { clip-path: inset(20% 0 60% 0); transform: translate(-1px, 2px); }
+}
+
+.glitch {
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.glitch::before {
+  color: #05d9e8;
+  animation: glitch-1 3s infinite linear;
+  opacity: 0.6;
+}
+
+.glitch::after {
+  color: #ff2a6d;
+  animation: glitch-2 3s infinite linear;
+  opacity: 0.6;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-15px) rotate(2deg); }
+  66% { transform: translateY(8px) rotate(-1deg); }
 }
 
 @keyframes ticker {
@@ -92,8 +209,13 @@ body {
 }
 
 .animate-ticker {
-  animation: ticker 30s linear infinite;
+  animation: ticker 25s linear infinite;
 }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--background); }
+::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 3px; }
 
 .wallet-adapter-button {
   font-family: inherit !important;
