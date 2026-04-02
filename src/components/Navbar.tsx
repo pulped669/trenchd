@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 
 const NAV_LINKS = [
@@ -11,29 +12,33 @@ const NAV_LINKS = [
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
+
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-bg/80 backdrop-blur-xl backdrop-saturate-150">
-      <div className="mx-auto flex h-12 max-w-6xl items-center justify-between px-4">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="text-[17px] font-extrabold tracking-tight text-fg">
-            trenchd
+    <header className="sticky top-0 z-50 bg-bg/80 backdrop-blur-2xl backdrop-saturate-[1.8]">
+      <div className="mx-auto flex h-[52px] max-w-[1120px] items-center justify-between px-5">
+        <div className="flex items-center gap-7">
+          <Link href="/" className="group flex items-baseline gap-0.5">
+            <span className="text-[16px] font-extrabold tracking-[-0.03em] text-fg transition-colors group-hover:text-accent">
+              trenchd
+            </span>
           </Link>
-          <div className="hidden h-5 w-px bg-border md:block" />
-          <nav className="hidden items-center gap-0.5 md:flex">
+          <nav className="hidden items-center md:flex">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="rounded-md px-2.5 py-1 text-[13px] text-fg-secondary transition-colors hover:text-fg"
+                className="relative px-3 py-1 text-[13px] font-medium text-fg-muted transition-colors hover:text-fg"
               >
                 {link.label}
               </Link>
             ))}
           </nav>
         </div>
-        <div className="flex items-center gap-3">
-          <ThemeToggle />
-        </div>
+        <ThemeToggle />
+      </div>
+      <div className="mx-auto max-w-[1120px] px-5">
+        <div className="h-px bg-border" />
       </div>
     </header>
   );
