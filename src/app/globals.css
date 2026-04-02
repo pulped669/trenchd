@@ -2,26 +2,26 @@
 
 :root {
   --bg: #ffffff;
-  --bg-secondary: #f8f8fa;
+  --bg-secondary: #f5f5f7;
   --fg: #111111;
   --fg-secondary: #555555;
   --fg-muted: #999999;
   --accent: #720eec;
   --accent-light: #8b3cf0;
-  --border: #ebebeb;
+  --border: #e8e8e8;
   --card: #ffffff;
 }
 
 .dark {
-  --bg: #111111;
-  --bg-secondary: #1a1a1a;
-  --fg: #f0f0f0;
-  --fg-secondary: #aaaaaa;
-  --fg-muted: #666666;
+  --bg: #0e0e0e;
+  --bg-secondary: #161616;
+  --fg: #eeeeee;
+  --fg-secondary: #999999;
+  --fg-muted: #555555;
   --accent: #8b3cf0;
   --accent-light: #a55ff5;
-  --border: #222222;
-  --card: #1a1a1a;
+  --border: #1e1e1e;
+  --card: #151515;
 }
 
 @theme inline {
@@ -50,4 +50,13 @@ body {
 
 ::selection {
   background: rgba(114, 14, 236, 0.15);
+}
+
+/* Hide scrollbar on ticker */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }

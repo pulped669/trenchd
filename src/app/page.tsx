@@ -1,125 +1,96 @@
-"use client";
-
-import { useState } from "react";
-import { ARTICLES, CATEGORIES } from "@/lib/articles";
-import { ArticleCardLarge, ArticleCardSmall } from "@/components/ArticleCard";
+import { ARTICLES } from "@/lib/articles";
+import { ArticleHero, ArticleCardMedium, ArticleCardRow } from "@/components/ArticleCard";
 import Newsletter from "@/components/Newsletter";
 
 export default function Home() {
-  const [activeCategory, setActiveCategory] = useState("All");
-
-  const featured = ARTICLES.filter((a) => a.featured);
-  const filtered =
-    activeCategory === "All"
-      ? ARTICLES.filter((a) => !a.featured)
-      : ARTICLES.filter((a) => a.category === activeCategory);
+  const hero = ARTICLES[0];
+  const editorsPicks = ARTICLES.filter((a) => a.featured).slice(0, 3);
+  const latest = ARTICLES.filter((a) => !a.featured);
+  const mostRead = [...ARTICLES].sort(() => 0.5 - Math.random()).slice(0, 5);
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
+    <main className="mx-auto max-w-6xl px-4">
       {/* Hero */}
-      <section className="mb-10">
-        <h1 className="text-3xl font-bold tracking-tight text-fg sm:text-4xl">
-          Crypto news & intelligence
-        </h1>
-        <p className="mt-2 text-[15px] text-fg-secondary">
-          Market moves, protocol updates, and alpha — curated by{" "}
-          <a
-            href="https://resellcalendar.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-accent hover:underline"
-          >
-            Resell Calendar
-          </a>
-          .
-        </p>
+      <section className="py-6">
+        <ArticleHero article={hero} />
       </section>
 
-      {/* Featured */}
-      <section className="mb-12">
-        <h2 className="mb-5 text-[13px] font-semibold uppercase tracking-wider text-fg-muted">
-          Top Picks
-        </h2>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {featured.map((article) => (
-            <ArticleCardLarge key={article.slug} article={article} />
+      {/* Editor's Picks */}
+      <section className="py-6">
+        <div className="mb-4 flex items-center gap-3">
+          <h2 className="text-[13px] font-bold uppercase tracking-wider text-fg-muted">Editor&apos;s Picks</h2>
+          <div className="h-px flex-1 bg-border" />
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {editorsPicks.map((a) => (
+            <ArticleCardMedium key={a.slug} article={a} />
           ))}
         </div>
       </section>
 
-      {/* Category filter + articles */}
-      <div className="flex flex-col gap-8 lg:flex-row">
-        <section className="flex-1">
-          {/* Category pills */}
-          <div className="mb-6 flex flex-wrap gap-1.5">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`rounded-lg px-3 py-1.5 text-[12px] font-medium transition-all ${
-                  activeCategory === cat
-                    ? "bg-accent text-white"
-                    : "bg-bg-secondary text-fg-secondary hover:text-fg"
-                }`}
-              >
-                {cat}
-              </button>
+      {/* Latest + Sidebar */}
+      <section className="flex flex-col gap-8 py-6 lg:flex-row">
+        {/* Latest news */}
+        <div className="flex-1 min-w-0">
+          <div className="mb-4 flex items-center gap-3">
+            <h2 className="text-[13px] font-bold uppercase tracking-wider text-fg-muted">Latest</h2>
+            <div className="h-px flex-1 bg-border" />
+          </div>
+          <div>
+            {latest.map((a, i) => (
+              <ArticleCardRow key={a.slug} article={a} index={i} />
             ))}
           </div>
-
-          {/* Article list */}
-          <div className="space-y-5">
-            {filtered.length === 0 && (
-              <p className="py-12 text-center text-[14px] text-fg-muted">
-                No articles in this category yet.
-              </p>
-            )}
-            {filtered.map((article) => (
-              <ArticleCardSmall key={article.slug} article={article} />
-            ))}
-          </div>
-        </section>
+        </div>
 
         {/* Sidebar */}
         <aside className="w-full shrink-0 space-y-5 lg:w-72">
-          <Newsletter />
-
-          <div className="rounded-2xl border border-border bg-card p-6">
-            <h3 className="text-[15px] font-semibold text-fg">Trending</h3>
-            <div className="mt-3 space-y-3">
-              {ARTICLES.slice(0, 4).map((a, i) => (
-                <a
-                  key={a.slug}
-                  href={`/article/${a.slug}`}
-                  className="flex items-start gap-3 group"
-                >
-                  <span className="mt-0.5 text-[18px] font-bold text-fg-muted/40">
-                    {String(i + 1).padStart(2, "0")}
+          {/* Most Read */}
+          <div className="rounded-2xl border border-border bg-card p-5">
+            <h3 className="text-[13px] font-bold uppercase tracking-wider text-fg-muted">Most Read</h3>
+            <div className="mt-3 space-y-4">
+              {mostRead.map((a, i) => (
+                <a key={a.slug} href={`/article/${a.slug}`} className="group flex items-start gap-3">
+                  <span className="mt-0.5 text-[20px] font-extrabold leading-none text-accent/20">
+                    {i + 1}
                   </span>
-                  <span className="text-[13px] font-medium leading-snug text-fg-secondary transition-colors group-hover:text-accent line-clamp-2">
-                    {a.title}
-                  </span>
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-accent">{a.category}</span>
+                    <p className="mt-0.5 text-[13px] font-semibold leading-snug text-fg transition-colors group-hover:text-accent line-clamp-2">
+                      {a.title}
+                    </p>
+                  </div>
                 </a>
               ))}
             </div>
           </div>
 
-          <div className="rounded-2xl border border-accent/15 bg-accent/5 p-6">
-            <p className="text-[13px] font-semibold text-accent">From Resell Calendar</p>
-            <p className="mt-2 text-[13px] leading-relaxed text-fg-secondary">
-              Track sneaker drops, electronics restocks, and reselling opportunities.
-            </p>
-            <a
-              href="https://resellcalendar.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-block text-[12px] font-semibold text-accent hover:underline"
-            >
-              Visit resellcalendar.com &rarr;
-            </a>
+          <Newsletter />
+
+          {/* Market Snapshot */}
+          <div className="rounded-2xl border border-border bg-card p-5">
+            <h3 className="text-[13px] font-bold uppercase tracking-wider text-fg-muted">Market Snapshot</h3>
+            <div className="mt-3 space-y-2.5">
+              {[
+                { label: "Total Market Cap", value: "$3.42T", change: "+1.8%" },
+                { label: "24h Volume", value: "$142B", change: "+12.3%" },
+                { label: "BTC Dominance", value: "52.4%", change: "-0.3%" },
+                { label: "ETH/BTC", value: "0.0387", change: "+0.6%" },
+              ].map((item) => (
+                <div key={item.label} className="flex items-center justify-between text-[12px]">
+                  <span className="text-fg-secondary">{item.label}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-fg">{item.value}</span>
+                    <span className={item.change.startsWith("+") ? "text-emerald-500" : "text-red-500"}>
+                      {item.change}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </aside>
-      </div>
+      </section>
     </main>
   );
 }

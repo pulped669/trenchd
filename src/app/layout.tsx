@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import PriceTicker from "@/components/PriceTicker";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -10,9 +11,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "trenchd — crypto news & intelligence",
+  title: "trenchd — crypto news & market intelligence",
   description:
-    "Crypto news, market analysis, and trading intelligence. By Resell Calendar.",
+    "Breaking crypto news, market analysis, DeFi updates, and trading intelligence.",
 };
 
 export default function RootLayout({
@@ -25,51 +26,43 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{const t=localStorage.getItem("theme"),d=window.matchMedia("(prefers-color-scheme:dark)").matches;if(t==="dark"||(! t&&d))document.documentElement.classList.add("dark")}catch(e){}`,
+            __html: `try{const t=localStorage.getItem("theme"),d=window.matchMedia("(prefers-color-scheme:dark)").matches;if(t==="dark"||(!t&&d))document.documentElement.classList.add("dark")}catch(e){}`,
           }}
         />
       </head>
       <body>
         <Navbar />
+        <PriceTicker />
         {children}
-        <footer className="border-t border-border bg-bg">
+        <footer className="border-t border-border bg-bg-secondary/50">
           <div className="mx-auto max-w-6xl px-4 py-10">
             <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <p className="text-lg font-bold text-fg">
-                  trenchd<span className="text-accent">.</span>
-                </p>
-                <p className="mt-1 text-[13px] text-fg-muted">
-                  Crypto news by{" "}
-                  <a
-                    href="https://resellcalendar.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-accent hover:underline"
-                  >
-                    Resell Calendar
-                  </a>
+                <p className="text-[17px] font-extrabold text-fg">trenchd</p>
+                <p className="mt-1 max-w-xs text-[13px] leading-relaxed text-fg-muted">
+                  Crypto news and market intelligence. Breaking stories, deep analysis, and the signals that matter.
                 </p>
               </div>
-              <div className="flex gap-8 text-[13px] text-fg-secondary">
-                <div className="space-y-2">
-                  <p className="font-semibold text-fg">Sections</p>
-                  <a href="/?cat=Market" className="block hover:text-accent">Market</a>
-                  <a href="/?cat=DeFi" className="block hover:text-accent">DeFi</a>
-                  <a href="/?cat=Bitcoin" className="block hover:text-accent">Bitcoin</a>
-                  <a href="/?cat=Ethereum" className="block hover:text-accent">Ethereum</a>
+              <div className="flex gap-10 text-[13px]">
+                <div className="space-y-2.5">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-fg-muted">Sections</p>
+                  <a href="/?cat=Market" className="block text-fg-secondary hover:text-accent">Market</a>
+                  <a href="/?cat=DeFi" className="block text-fg-secondary hover:text-accent">DeFi</a>
+                  <a href="/?cat=Bitcoin" className="block text-fg-secondary hover:text-accent">Bitcoin</a>
+                  <a href="/?cat=Ethereum" className="block text-fg-secondary hover:text-accent">Ethereum</a>
+                  <a href="/?cat=NFTs" className="block text-fg-secondary hover:text-accent">NFTs</a>
                 </div>
-                <div className="space-y-2">
-                  <p className="font-semibold text-fg">Company</p>
-                  <a href="https://resellcalendar.com" target="_blank" rel="noopener noreferrer" className="block hover:text-accent">Resell Calendar</a>
-                  <a href="#" className="block hover:text-accent">Advertise</a>
-                  <a href="#" className="block hover:text-accent">Privacy</a>
-                  <a href="#" className="block hover:text-accent">Terms</a>
+                <div className="space-y-2.5">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-fg-muted">More</p>
+                  <a href="#" className="block text-fg-secondary hover:text-accent">About</a>
+                  <a href="#" className="block text-fg-secondary hover:text-accent">Advertise</a>
+                  <a href="#" className="block text-fg-secondary hover:text-accent">Privacy Policy</a>
+                  <a href="#" className="block text-fg-secondary hover:text-accent">Terms of Service</a>
                 </div>
               </div>
             </div>
             <div className="mt-8 border-t border-border pt-6 text-[11px] text-fg-muted">
-              &copy; {new Date().getFullYear()} trenchd. A Resell Calendar property.
+              &copy; {new Date().getFullYear()} trenchd. All rights reserved.
             </div>
           </div>
         </footer>
