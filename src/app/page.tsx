@@ -217,9 +217,9 @@ function WatchingSection() {
   const y = useTransform(smooth, [0.1, 0.3, 0.7, 0.88], [80, 0, 0, -80]);
 
   const corrections = [
-    { flaw: "You moved your stop loss", fix: "That widens your risk to 4.2%. Original stop had 1.8% risk. Keep it.", color: "#ff2a6d", delay: 0 },
-    { flaw: "You've checked this chart 6 times in 20 min", fix: "You're overtrading this setup. Step away. The entry is at $148, not here.", color: "#8b5cf6", delay: 0.4 },
-    { flaw: "You just revenge traded", fix: "Last 3 entries were within 8 minutes of a loss. Take a break. I'll watch.", color: "#05d9e8", delay: 0.8 },
+    { flaw: "EXIT NOW.", fix: "You've recovered your loss from earlier. Take the win and move on — coin is starting to taper off.", color: "#ff2a6d", delay: 0 },
+    { flaw: "Don't enter.", fix: "You always get fucked when you enter this high. Wait for a pullback or skip it entirely.", color: "#8b5cf6", delay: 0.4 },
+    { flaw: "You just revenge traded.", fix: "Last 3 entries were within 8 minutes of a loss. Step away. I'll keep watching.", color: "#05d9e8", delay: 0.8 },
   ];
 
   return (
