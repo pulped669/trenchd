@@ -41,4 +41,9 @@ body {
 
 ::-webkit-scrollbar { width: 0px; }
 
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
 .wallet-adapter-button { font-family: inherit !important; }
