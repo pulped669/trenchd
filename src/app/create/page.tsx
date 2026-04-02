@@ -31,39 +31,46 @@ export default function CreateToken() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-lg px-4 py-12">
-      <h1 className="text-2xl font-bold text-white">Create Token</h1>
-      <p className="mt-1 text-sm text-zinc-400">
-        Launch a token on a bonding curve. No presale, no team allocation.
-      </p>
+    <main className="mx-auto w-full max-w-lg px-4 py-16">
+      <div className="text-center">
+        <span className="inline-block rounded-full bg-green-light px-3 py-1 text-xs font-medium text-green-dark">
+          New Token
+        </span>
+        <h1 className="mt-3 text-2xl font-bold text-foreground">
+          Launch your token
+        </h1>
+        <p className="mt-1 text-sm text-gray-text">
+          Fair launch on a bonding curve. No presale, no team allocation.
+        </p>
+      </div>
 
-      <form onSubmit={handleCreate} className="mt-8 space-y-5">
+      <form onSubmit={handleCreate} className="mt-10 space-y-5">
         <div>
-          <label className="text-sm font-medium text-zinc-300">Name</label>
+          <label className="text-sm font-medium text-foreground">Name</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. TrenchCat"
             maxLength={32}
-            className="mt-1 w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-white placeholder-zinc-600 outline-none focus:border-emerald-500"
+            className="mt-1.5 w-full rounded-xl border border-gray-border bg-white px-4 py-3 text-foreground placeholder-zinc-400 outline-none transition-colors focus:border-green"
           />
         </div>
 
         <div>
-          <label className="text-sm font-medium text-zinc-300">Ticker</label>
+          <label className="text-sm font-medium text-foreground">Ticker</label>
           <input
             type="text"
             value={ticker}
             onChange={(e) => setTicker(e.target.value.toUpperCase())}
             placeholder="e.g. TCAT"
             maxLength={10}
-            className="mt-1 w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-white placeholder-zinc-600 outline-none focus:border-emerald-500"
+            className="mt-1.5 w-full rounded-xl border border-gray-border bg-white px-4 py-3 text-foreground placeholder-zinc-400 outline-none transition-colors focus:border-green"
           />
         </div>
 
         <div>
-          <label className="text-sm font-medium text-zinc-300">
+          <label className="text-sm font-medium text-foreground">
             Description
           </label>
           <textarea
@@ -72,16 +79,16 @@ export default function CreateToken() {
             placeholder="What's this token about?"
             rows={3}
             maxLength={256}
-            className="mt-1 w-full resize-none rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-white placeholder-zinc-600 outline-none focus:border-emerald-500"
+            className="mt-1.5 w-full resize-none rounded-xl border border-gray-border bg-white px-4 py-3 text-foreground placeholder-zinc-400 outline-none transition-colors focus:border-green"
           />
-          <p className="mt-1 text-right text-xs text-zinc-600">
+          <p className="mt-1 text-right text-xs text-gray-text">
             {description.length}/256
           </p>
         </div>
 
-        <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-4">
-          <h3 className="text-sm font-medium text-zinc-300">Token Details</h3>
-          <div className="mt-2 space-y-1 text-xs text-zinc-500">
+        <div className="rounded-xl border border-gray-border bg-gray-bg p-4">
+          <h3 className="text-sm font-medium text-foreground">Token Details</h3>
+          <div className="mt-2 space-y-1 text-xs text-gray-text">
             <p>Supply: 1,000,000,000 tokens</p>
             <p>Fair launch — no presale, no team tokens</p>
             <p>Bonding curve graduates to Raydium at ~69 SOL market cap</p>
@@ -92,14 +99,14 @@ export default function CreateToken() {
           <button
             type="submit"
             disabled={creating || !name || !ticker}
-            className="w-full rounded-lg bg-emerald-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-xl bg-green-dark py-3.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {creating ? "Creating..." : "Create Token"}
+            {creating ? "Creating..." : "Launch Token"}
           </button>
         ) : (
-          <p className="rounded-lg border border-zinc-800 py-3 text-center text-sm text-zinc-500">
-            Connect your wallet to create a token
-          </p>
+          <div className="rounded-xl border border-gray-border bg-gray-bg py-4 text-center text-sm text-gray-text">
+            Connect your wallet to launch a token
+          </div>
         )}
       </form>
     </main>

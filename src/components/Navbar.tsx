@@ -13,28 +13,20 @@ const WalletMultiButton = dynamic(
 
 export default function Navbar() {
   return (
-    <nav className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-        <div className="flex items-center gap-8">
-          <Link href="/" className="text-xl font-bold text-emerald-400">
-            trenchd
+    <nav className="sticky top-0 z-50 border-b border-gray-border bg-white/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
+        <Link href="/" className="text-xl font-bold text-green-dark">
+          trenchd
+        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/create"
+            className="hidden text-sm text-gray-text transition-colors hover:text-foreground sm:block"
+          >
+            Launch Token
           </Link>
-          <div className="hidden items-center gap-6 sm:flex">
-            <Link
-              href="/"
-              className="text-sm text-zinc-400 transition-colors hover:text-white"
-            >
-              Feed
-            </Link>
-            <Link
-              href="/create"
-              className="text-sm text-zinc-400 transition-colors hover:text-white"
-            >
-              Create Token
-            </Link>
-          </div>
+          <WalletMultiButton className="!bg-green-dark !rounded-lg !h-10 !text-sm !font-medium hover:!opacity-90 !transition-opacity" />
         </div>
-        <WalletMultiButton className="!bg-emerald-600 !rounded-lg !h-10 !text-sm hover:!bg-emerald-500 !transition-colors" />
       </div>
     </nav>
   );

@@ -1,85 +1,95 @@
-"use client";
-
-import { useState } from "react";
-import TokenCard from "@/components/TokenCard";
-import { MOCK_TOKENS } from "@/lib/mock-data";
-
-type SortOption = "newest" | "marketcap" | "progress";
+import Link from "next/link";
 
 export default function Home() {
-  const [sort, setSort] = useState<SortOption>("newest");
-  const [search, setSearch] = useState("");
-
-  const filtered = MOCK_TOKENS.filter(
-    (t) =>
-      t.name.toLowerCase().includes(search.toLowerCase()) ||
-      t.ticker.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const sorted = [...filtered].sort((a, b) => {
-    if (sort === "newest") return b.createdAt - a.createdAt;
-    if (sort === "marketcap") return b.marketCap - a.marketCap;
-    return b.sold / b.supply - a.sold / a.supply;
-  });
-
   return (
-    <main className="mx-auto w-full max-w-7xl px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">
-          Launch tokens in the{" "}
-          <span className="text-emerald-400">trenches</span>
+    <main>
+      {/* Hero */}
+      <section className="mx-auto max-w-3xl px-4 pb-20 pt-24 text-center">
+        <span className="inline-block rounded-full bg-green-light px-4 py-1.5 text-sm font-medium text-green-dark">
+          Solana Token Launcher
+        </span>
+        <h1 className="mt-6 text-5xl font-bold leading-tight tracking-tight text-foreground sm:text-6xl">
+          Launch your token
+          <br />
+          in the <span className="text-green">trenches</span>
         </h1>
-        <p className="mt-2 text-zinc-400">
-          Create and trade fair-launch tokens on Solana with bonding curves
+        <p className="mx-auto mt-5 max-w-md text-lg text-gray-text">
+          Create and launch fair tokens on Solana with automatic bonding curves.
+          No presale. No team allocation. Just launch.
         </p>
-      </div>
+        <Link
+          href="/create"
+          className="mt-8 inline-flex h-12 items-center rounded-xl bg-green-dark px-8 text-base font-semibold text-white transition-opacity hover:opacity-90"
+        >
+          Start a Launch
+        </Link>
+      </section>
 
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search tokens..."
-          className="rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-emerald-500 sm:w-72"
-        />
-        <div className="flex gap-1 rounded-lg bg-zinc-900 p-1">
-          {(
-            [
-              ["newest", "New"],
-              ["marketcap", "Market Cap"],
-              ["progress", "Graduating"],
-            ] as const
-          ).map(([value, label]) => (
-            <button
-              key={value}
-              onClick={() => setSort(value)}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-                sort === value
-                  ? "bg-zinc-800 text-white"
-                  : "text-zinc-500 hover:text-zinc-300"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
+      {/* How it works */}
+      <section className="border-t border-gray-border bg-gray-bg">
+        <div className="mx-auto max-w-4xl px-4 py-20">
+          <h2 className="text-center text-3xl font-bold text-foreground">
+            How it works
+          </h2>
+          <div className="mt-14 grid gap-10 sm:grid-cols-3">
+            <div className="text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-light text-lg font-bold text-green-dark">
+                1
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-foreground">
+                Create your token
+              </h3>
+              <p className="mt-2 text-sm text-gray-text">
+                Pick a name, ticker, and description. Your token launches
+                instantly on a bonding curve.
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-light text-lg font-bold text-green-dark">
+                2
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-foreground">
+                People buy in
+              </h3>
+              <p className="mt-2 text-sm text-gray-text">
+                Anyone can buy tokens along the bonding curve. Price rises as
+                more tokens are sold.
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-light text-lg font-bold text-green-dark">
+                3
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-foreground">
+                Graduates to DEX
+              </h3>
+              <p className="mt-2 text-sm text-gray-text">
+                At ~69 SOL market cap, liquidity is automatically deposited to
+                Raydium and the token trades freely.
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {sorted.map((token) => (
-          <TokenCard key={token.mint} token={token} />
-        ))}
-      </div>
+      {/* CTA */}
+      <section className="mx-auto max-w-3xl px-4 py-20 text-center">
+        <h2 className="text-3xl font-bold text-foreground">Ready to launch?</h2>
+        <p className="mt-3 text-gray-text">
+          It takes less than a minute. Connect your wallet and go.
+        </p>
+        <Link
+          href="/create"
+          className="mt-6 inline-flex h-12 items-center rounded-xl bg-green-dark px-8 text-base font-semibold text-white transition-opacity hover:opacity-90"
+        >
+          Launch a Token
+        </Link>
+      </section>
 
-      {sorted.length === 0 && (
-        <div className="py-20 text-center text-zinc-500">
-          No tokens found. Be the first to{" "}
-          <a href="/create" className="text-emerald-400 hover:underline">
-            create one
-          </a>
-          .
-        </div>
-      )}
+      {/* Footer */}
+      <footer className="border-t border-gray-border py-8 text-center text-sm text-gray-text">
+        <p>&copy; {new Date().getFullYear()} trenchd. All rights reserved.</p>
+      </footer>
     </main>
   );
 }
