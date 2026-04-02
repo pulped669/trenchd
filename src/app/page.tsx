@@ -91,9 +91,8 @@ function Nav() {
           borderColor: scrolled ? "rgba(255,255,255,0.03)" : "transparent",
         }}
       />
-      <span className="relative z-10 flex items-center gap-2.5">
-        <img src="/logo.svg" alt="" className="h-6 w-auto opacity-80" />
-        <span className="text-[13px] font-bold tracking-[0.2em] text-fg/70">TRENCHD</span>
+      <span className="relative z-10 text-[13px] font-bold tracking-[0.2em] text-fg/70">
+        TRENCHD
       </span>
       <button
         onClick={() => (session ? null : signIn("twitter"))}
@@ -135,23 +134,6 @@ function Hero() {
         style={{ opacity, scale, y, filter: useTransform(blur, (v) => `blur(${v}px)`) }}
         className="relative text-center px-6"
       >
-        {/* Puppet logo */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2 }}
-          className="mx-auto mb-8"
-        >
-          <motion.img
-            src="/logo.svg"
-            alt=""
-            className="mx-auto h-28 w-auto sm:h-36"
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            style={{ filter: "drop-shadow(0 0 30px rgba(139,92,246,0.2)) drop-shadow(0 0 60px rgba(255,42,109,0.1))" }}
-          />
-        </motion.div>
-
         <motion.h1
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
