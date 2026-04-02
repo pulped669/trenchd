@@ -156,7 +156,8 @@ function Hero() {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 1.5, delay: 1.8 }}
-          className="mx-auto mt-10 h-px w-16 origin-center bg-accent/20"
+          className="mx-auto mt-10 h-px w-16 origin-center"
+          style={{ background: "linear-gradient(90deg, #ff2a6d, #8b5cf6, #05d9e8)" }}
         />
 
         <motion.div
@@ -219,7 +220,7 @@ function WatchingSection() {
                   transition={{ duration: 2, delay: i * 0.3, repeat: Infinity }}
                 />
                 <div>
-                  <p className="text-[13px] font-semibold text-accent">{c.flaw}</p>
+                  <p className="text-[13px] font-semibold" style={{ background: "linear-gradient(135deg, #ff2a6d 0%, #8b5cf6 50%, #05d9e8 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{c.flaw}</p>
                   <p className="mt-1.5 text-[13px] leading-relaxed text-fg/45">{c.fix}</p>
                 </div>
               </div>
@@ -245,7 +246,7 @@ function Statement() {
         <p className="text-[clamp(1.8rem,4vw,3rem)] font-semibold leading-[1.2] tracking-[-0.03em] text-fg">
           Your worst habit is invisible to you.
           <br />
-          <span className="text-accent">Not to trenchd.</span>
+          <span style={{ background: "linear-gradient(135deg, #ff2a6d 0%, #8b5cf6 50%, #05d9e8 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Not to trenchd.</span>
         </p>
       </motion.div>
     </section>
@@ -264,14 +265,14 @@ function CtaSection() {
   return (
     <section ref={ref} className="relative flex min-h-[55vh] items-center justify-center px-6 pb-24">
       <motion.div style={{ opacity, scale }} className="text-center">
-        <h2 className="text-[clamp(2.5rem,6.5vw,4.5rem)] font-black tracking-[-0.04em] text-fg">
-          See yourself clearly.
+        <h2 className="text-[clamp(2.5rem,6.5vw,4.5rem)] font-black tracking-[-0.04em]">
+          <span style={{ background: "linear-gradient(135deg, #ff2a6d 0%, #8b5cf6 50%, #05d9e8 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>See yourself clearly.</span>
         </h2>
 
         <motion.button
           onClick={() => (session ? null : signIn("twitter"))}
-          className="mt-12 inline-flex h-14 items-center gap-3 rounded-full bg-accent px-10 text-[15px] font-semibold text-white transition-transform hover:scale-[1.03] active:scale-[0.97]"
-          style={{ boxShadow: "0 0 30px rgba(255,42,109,0.2), 0 0 60px rgba(255,42,109,0.08)" }}
+          className="mt-12 inline-flex h-14 items-center gap-3 rounded-full px-10 text-[15px] font-semibold text-white transition-transform hover:scale-[1.03] active:scale-[0.97]"
+          style={{ background: "linear-gradient(135deg, #ff2a6d 0%, #8b5cf6 50%, #05d9e8 100%)", boxShadow: "0 0 30px rgba(255,42,109,0.2), 0 0 60px rgba(139,92,246,0.1)" }}
         >
           {session ? (
             "Open Dashboard"
