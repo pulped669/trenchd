@@ -134,11 +134,33 @@ function Hero() {
         style={{ opacity, scale, y, filter: useTransform(blur, (v) => `blur(${v}px)`) }}
         className="relative text-center px-6"
       >
+        {/* Eye icon */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1 }}
+          className="mx-auto mb-10 flex h-16 w-16 items-center justify-center rounded-full"
+          style={{
+            background: "linear-gradient(135deg, rgba(255,42,109,0.1) 0%, rgba(139,92,246,0.1) 100%)",
+            boxShadow: "0 0 40px rgba(255,42,109,0.1), 0 0 80px rgba(139,92,246,0.05)",
+          }}
+        >
+          <motion.div
+            animate={{ scale: [1, 1.15, 1] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <svg viewBox="0 0 24 24" fill="none" className="h-7 w-7">
+              <path d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" stroke="rgba(255,42,109,0.6)" strokeWidth="1.5" />
+              <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke="rgba(255,42,109,0.6)" strokeWidth="1.5" />
+            </svg>
+          </motion.div>
+        </motion.div>
+
         <motion.h1
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.5 }}
-          className="text-[clamp(4rem,14vw,11rem)] font-black leading-[0.85] tracking-[-0.05em]"
+          transition={{ duration: 1.5, delay: 0.3 }}
+          className="text-[clamp(3.5rem,12vw,9rem)] font-black leading-[0.85] tracking-[-0.05em]"
         >
           <span
             className="block"
@@ -156,16 +178,16 @@ function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-8 text-[clamp(1.1rem,2.2vw,1.5rem)] font-light tracking-wide text-muted"
+          transition={{ duration: 0.8, delay: 1 }}
+          className="mt-8 text-[clamp(1.05rem,2vw,1.35rem)] font-light tracking-wide text-muted"
         >
-          AI that trades with you.
+          It&apos;s always watching. Always learning you.
         </motion.p>
 
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ duration: 1.5, delay: 1.8 }}
+          transition={{ duration: 1.5, delay: 2 }}
           className="mx-auto mt-10 h-px w-16 origin-center bg-gradient-to-r from-transparent via-pink/30 to-transparent"
         />
 
@@ -186,98 +208,60 @@ function Hero() {
   );
 }
 
-// ─── AI Chat mockup ───
-function AIMockup() {
+// ─── Screen watching mockup ───
+function WatchingSection() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 25 });
   const opacity = useTransform(smooth, [0.1, 0.3, 0.7, 0.88], [0, 1, 1, 0]);
   const y = useTransform(smooth, [0.1, 0.3, 0.7, 0.88], [80, 0, 0, -80]);
 
-  const messages = [
-    { role: "ai" as const, text: "SOL breaking out of the 4h wedge. Volume confirming.", delay: 0 },
-    { role: "ai" as const, text: "Entry zone: $148.20–$149.00. R:R looks 3.2:1 here.", delay: 0.3 },
-    { role: "user" as const, text: "What's the stop?", delay: 0.6 },
-    { role: "ai" as const, text: "$145.80 — below the structure. Invalidates the setup.", delay: 0.9 },
-    { role: "ai" as const, text: "Taking profit at $156. I'd scale out 50% there.", delay: 1.2 },
+  const corrections = [
+    { flaw: "You moved your stop loss", fix: "That widens your risk to 4.2%. Original stop had 1.8% risk. Keep it.", color: "#ff2a6d", delay: 0 },
+    { flaw: "You've checked this chart 6 times in 20 min", fix: "You're overtrading this setup. Step away. The entry is at $148, not here.", color: "#8b5cf6", delay: 0.4 },
+    { flaw: "You just revenge traded", fix: "Last 3 entries were within 8 minutes of a loss. Take a break. I'll watch.", color: "#05d9e8", delay: 0.8 },
   ];
 
   return (
-    <section ref={ref} className="relative flex min-h-[90vh] items-center justify-center px-6">
-      <motion.div style={{ opacity, y }} className="flex flex-col items-center gap-12 lg:flex-row lg:gap-20">
-        {/* Text */}
-        <div className="max-w-sm text-center lg:text-left">
+    <section ref={ref} className="relative flex min-h-[95vh] items-center justify-center px-6">
+      <motion.div style={{ opacity, y }} className="w-full max-w-3xl">
+        <div className="mb-12 text-center">
           <p className="text-[clamp(1.8rem,3.5vw,2.6rem)] font-semibold leading-[1.15] tracking-[-0.02em]">
-            It sees what
+            It finds what you won&apos;t
             <br />
-            you don&apos;t.
-          </p>
-          <p className="mt-5 text-[15px] font-light leading-relaxed text-muted/70">
-            Real-time AI analysis while you trade. Entries, exits, risk levels — whispered in your ear before the move happens.
+            <span className="text-muted">admit to yourself.</span>
           </p>
         </div>
 
-        {/* Chat UI */}
-        <div className="w-full max-w-sm">
-          <div
-            className="overflow-hidden rounded-2xl border border-fg/[0.04]"
-            style={{
-              background: "linear-gradient(180deg, rgba(12,12,18,0.9) 0%, rgba(8,8,14,0.95) 100%)",
-              boxShadow: "0 0 80px rgba(139,92,246,0.06), 0 20px 60px rgba(0,0,0,0.4)",
-            }}
-          >
-            {/* Title bar */}
-            <div className="flex items-center gap-2 border-b border-fg/[0.03] px-5 py-3">
-              <motion.div
-                className="h-2 w-2 rounded-full bg-pink"
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                style={{ boxShadow: "0 0 8px rgba(255,42,109,0.5)" }}
-              />
-              <span className="text-[11px] font-medium tracking-wider text-fg/30">TRENCHD AI</span>
-            </div>
-
-            {/* Messages */}
-            <div className="space-y-3 p-5">
-              {messages.map((msg, i) => (
+        <div className="space-y-4">
+          {corrections.map((c, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: c.delay, duration: 0.6 }}
+              className="overflow-hidden rounded-2xl border border-fg/[0.04]"
+              style={{
+                background: "linear-gradient(135deg, rgba(12,12,18,0.9) 0%, rgba(8,8,14,0.95) 100%)",
+                boxShadow: `0 0 40px ${c.color}06, 0 8px 30px rgba(0,0,0,0.3)`,
+              }}
+            >
+              <div className="flex items-start gap-4 p-5">
+                {/* Pulse dot */}
                 <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 8 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: msg.delay, duration: 0.5 }}
-                  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                >
-                  <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-[13px] leading-relaxed ${
-                      msg.role === "ai"
-                        ? "rounded-bl-md bg-fg/[0.04] text-fg/75"
-                        : "rounded-br-md bg-pink/10 text-fg/60"
-                    }`}
-                  >
-                    {msg.text}
-                  </div>
-                </motion.div>
-              ))}
-              {/* Typing indicator */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 1.6 }}
-                className="flex gap-1 px-1 pt-1"
-              >
-                {[0, 1, 2].map((i) => (
-                  <motion.div
-                    key={i}
-                    className="h-1.5 w-1.5 rounded-full bg-fg/15"
-                    animate={{ opacity: [0.2, 0.7, 0.2] }}
-                    transition={{ duration: 1.2, delay: i * 0.2, repeat: Infinity }}
-                  />
-                ))}
-              </motion.div>
-            </div>
-          </div>
+                  className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
+                  style={{ backgroundColor: c.color, boxShadow: `0 0 10px ${c.color}60` }}
+                  animate={{ opacity: [0.4, 1, 0.4] }}
+                  transition={{ duration: 2, delay: i * 0.3, repeat: Infinity }}
+                />
+                <div>
+                  <p className="text-[13px] font-medium" style={{ color: c.color }}>{c.flaw}</p>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-fg/50">{c.fix}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </motion.div>
     </section>
@@ -293,10 +277,10 @@ function Statement() {
   const y = useTransform(smooth, [0.2, 0.4, 0.6, 0.8], [60, 0, 0, -60]);
 
   return (
-    <section ref={ref} className="relative flex min-h-[70vh] items-center justify-center px-6">
+    <section ref={ref} className="relative flex min-h-[60vh] items-center justify-center px-6">
       <motion.div style={{ opacity, y }} className="max-w-3xl text-center">
-        <p className="text-[clamp(2rem,4.5vw,3.5rem)] font-semibold leading-[1.15] tracking-[-0.03em]">
-          You make the calls.
+        <p className="text-[clamp(1.8rem,4vw,3rem)] font-semibold leading-[1.2] tracking-[-0.03em]">
+          Your worst habit is invisible to you.
           <br />
           <span
             style={{
@@ -306,7 +290,7 @@ function Statement() {
               backgroundClip: "text",
             }}
           >
-            It makes you better.
+            Not to trenchd.
           </span>
         </p>
       </motion.div>
@@ -326,7 +310,7 @@ function CtaSection() {
   return (
     <section ref={ref} className="relative flex min-h-[60vh] items-center justify-center px-6 pb-24">
       <motion.div style={{ opacity, scale }} className="text-center">
-        <h2 className="text-[clamp(2.8rem,7vw,5rem)] font-black tracking-[-0.04em]">
+        <h2 className="text-[clamp(2.5rem,6.5vw,4.5rem)] font-black tracking-[-0.04em]">
           <span
             style={{
               background: "linear-gradient(135deg, #ff2a6d 0%, #8b5cf6 40%, #05d9e8 100%)",
@@ -336,7 +320,7 @@ function CtaSection() {
               filter: "drop-shadow(0 0 30px rgba(139,92,246,0.3))",
             }}
           >
-            Trade smarter.
+            See yourself clearly.
           </span>
         </h2>
 
@@ -369,16 +353,6 @@ function CtaSection() {
             </>
           )}
         </motion.button>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="mt-6 text-[13px] text-muted/30"
-        >
-          You trade. It guides.
-        </motion.p>
       </motion.div>
     </section>
   );
@@ -405,7 +379,7 @@ export default function Home() {
       <Nav />
       <main className="relative z-10">
         <Hero />
-        <AIMockup />
+        <WatchingSection />
         <Statement />
         <CtaSection />
         <footer className="border-t border-border py-8 text-center text-[11px] text-muted/20 tracking-widest">
