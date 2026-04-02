@@ -4,12 +4,10 @@ import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 
 const NAV_LINKS = [
-  { label: "Market", href: "/?cat=Market" },
-  { label: "DeFi", href: "/?cat=DeFi" },
-  { label: "Bitcoin", href: "/?cat=Bitcoin" },
-  { label: "Ethereum", href: "/?cat=Ethereum" },
-  { label: "NFTs", href: "/?cat=NFTs" },
-  { label: "Regulation", href: "/?cat=Regulation" },
+  { label: "Solana", href: "/?cat=Solana" },
+  { label: "Bankr", href: "/?cat=Bankr" },
+  { label: "Blue Chips", href: "/?cat=Blue+Chips" },
+  { label: "X", href: "/?cat=X" },
 ];
 
 export default function Navbar() {

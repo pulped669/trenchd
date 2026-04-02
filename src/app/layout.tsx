@@ -62,11 +62,10 @@ export default function RootLayout({
               <div className="flex gap-10 text-[13px]">
                 <div className="space-y-2.5">
                   <p className="text-[11px] font-bold uppercase tracking-wider text-fg-muted">Sections</p>
-                  <a href="/?cat=Market" className="block text-fg-secondary hover:text-accent">Market</a>
-                  <a href="/?cat=DeFi" className="block text-fg-secondary hover:text-accent">DeFi</a>
-                  <a href="/?cat=Bitcoin" className="block text-fg-secondary hover:text-accent">Bitcoin</a>
-                  <a href="/?cat=Ethereum" className="block text-fg-secondary hover:text-accent">Ethereum</a>
-                  <a href="/?cat=NFTs" className="block text-fg-secondary hover:text-accent">NFTs</a>
+                  <a href="/?cat=Solana" className="block text-fg-secondary hover:text-accent">Solana</a>
+                  <a href="/?cat=Bankr" className="block text-fg-secondary hover:text-accent">Bankr</a>
+                  <a href="/?cat=Blue+Chips" className="block text-fg-secondary hover:text-accent">Blue Chips</a>
+                  <a href="/?cat=X" className="block text-fg-secondary hover:text-accent">X</a>
                 </div>
                 <div className="space-y-2.5">
                   <p className="text-[11px] font-bold uppercase tracking-wider text-fg-muted">More</p>
