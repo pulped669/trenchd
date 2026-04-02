@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import PriceTicker from "@/components/PriceTicker";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -32,7 +31,6 @@ export default function RootLayout({
       </head>
       <body>
         <Navbar />
-        <PriceTicker />
         {children}
         <footer className="border-t border-border bg-bg-secondary/50">
           <div className="mx-auto max-w-6xl px-4 py-10">
