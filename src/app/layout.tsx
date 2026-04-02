@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import WalletProvider from "@/context/WalletProvider";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "react-hot-toast";
 
-const geistSans = Geist({
+const inter = Inter({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -27,10 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <WalletProvider>
           <Navbar />
@@ -39,9 +31,9 @@ export default function RootLayout({
             position="bottom-right"
             toastOptions={{
               style: {
-                background: "#ffffff",
-                color: "#232323",
-                border: "1px solid #e5e5e5",
+                background: "#111111",
+                color: "#f0f0f0",
+                border: "1px solid #1a1a1a",
               },
             }}
           />

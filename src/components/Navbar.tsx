@@ -13,19 +13,19 @@ const WalletMultiButton = dynamic(
 
 export default function Navbar() {
   return (
-    <nav className="sticky top-0 z-50 border-b border-gray-border bg-white/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
-        <Link href="/" className="text-xl font-bold text-green-dark">
-          trenchd
+    <nav className="sticky top-0 z-50 border-b border-border bg-background/70 backdrop-blur-xl">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+        <Link href="/" className="text-lg font-bold tracking-tight text-foreground">
+          trenchd<span className="text-accent">.</span>
         </Link>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-5">
           <Link
             href="/create"
-            className="hidden text-sm text-gray-text transition-colors hover:text-foreground sm:block"
+            className="hidden text-sm text-muted transition-colors hover:text-foreground sm:block"
           >
-            Launch Token
+            Launch
           </Link>
-          <WalletMultiButton className="!bg-green-dark !rounded-lg !h-10 !text-sm !font-medium hover:!opacity-90 !transition-opacity" />
+          <WalletMultiButton className="!bg-accent/10 !text-accent !border !border-accent/20 !rounded-lg !h-9 !text-sm !font-medium hover:!bg-accent/20 !transition-all" />
         </div>
       </div>
     </nav>
