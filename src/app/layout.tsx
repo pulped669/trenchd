@@ -2,19 +2,17 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import SessionProvider from "@/context/SessionProvider";
-import Navbar from "@/components/Navbar";
-import FloatingElements from "@/components/FloatingElements";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
-  title: "TRENCHD — Autonomous Solana Trading",
-  description:
-    "Fully autonomous Solana trading bot. Choose your strategy, set your risk, and let it run 24/7.",
+  title: "TRENCHD",
+  description: "Autonomous Solana trading.",
 };
 
 export default function RootLayout({
@@ -23,23 +21,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
+    <html lang="en" className={`${inter.variable} antialiased`}>
+      <body>
         <SessionProvider>
-          <FloatingElements />
-          <Navbar />
-          <div className="relative z-10">{children}</div>
+          {children}
           <Toaster
-            position="bottom-right"
+            position="bottom-center"
             toastOptions={{
               style: {
-                background: "rgba(18, 0, 37, 0.95)",
-                color: "#f0e6ff",
-                border: "1px solid rgba(5, 217, 232, 0.15)",
-                backdropFilter: "blur(20px)",
-                borderRadius: "4px",
-                fontFamily: "monospace",
-                fontSize: "13px",
+                background: "#0a0a10",
+                color: "#ededf0",
+                border: "1px solid rgba(255,255,255,0.05)",
+                borderRadius: "100px",
+                fontSize: "14px",
+                padding: "12px 24px",
               },
             }}
           />

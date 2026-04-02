@@ -1,415 +1,529 @@
 "use client";
 
-import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useSpring,
+  useMotionValueEvent,
+} from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
-import LiveTicker from "@/components/LiveTicker";
-import MiniChart from "@/components/MiniChart";
 
-const strategies = [
-  {
-    name: "MOMENTUM",
-    desc: "Rides trending tokens with volume spikes. Fast entries, tight stops.",
-    risk: "HIGH",
-    riskColor: "text-pink",
-    avg: "+34.2%",
-    trades: "~120/day",
-    color: "#ff2a6d",
-  },
-  {
-    name: "MEAN REVERT",
-    desc: "Buys dips on strong tokens. Patient, calculated entries.",
-    risk: "MEDIUM",
-    riskColor: "text-yellow",
-    avg: "+18.7%",
-    trades: "~40/day",
-    color: "#f5e642",
-  },
-  {
-    name: "SNIPER",
-    desc: "Catches new listings early. Extremely fast execution.",
-    risk: "EXTREME",
-    riskColor: "text-pink",
-    avg: "+52.8%",
-    trades: "~15/day",
-    color: "#9b5de5",
-  },
-  {
-    name: "DCA GRID",
-    desc: "Steady accumulation with grid orders. Low maintenance, consistent.",
-    risk: "LOW",
-    riskColor: "text-green",
-    avg: "+11.3%",
-    trades: "~200/day",
-    color: "#05d9e8",
-  },
-];
+// ─── Utility: smooth lerp color based on scroll ───
+function useSmoothProgress(scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"]) {
+  return useSpring(scrollYProgress, { stiffness: 80, damping: 30 });
+}
 
-const features = [
-  { title: "AUTONOMOUS", desc: "Set your strategy and walk away. Trades 24/7 without intervention.", icon: "⟐" },
-  { title: "14ms EXECUTION", desc: "Direct RPC connections. Faster than any human trader.", icon: "⚡" },
-  { title: "RISK ENGINE", desc: "Built-in stop losses, position sizing, and portfolio limits.", icon: "◈" },
-  { title: "LIVE P&L", desc: "Real-time tracking, trade history, and performance analytics.", icon: "◧" },
-  { title: "MULTI-DEX", desc: "Routes through Jupiter, Raydium, Orca. Best price, always.", icon: "⟁" },
-  { title: "NON-CUSTODIAL", desc: "Your keys. Your funds. We never touch your wallet.", icon: "⬡" },
-];
+// ─── Cursor glow that follows mouse ───
+function CursorGlow() {
+  const x = useMotionValue(-100);
+  const y = useMotionValue(-100);
+  const springX = useSpring(x, { stiffness: 150, damping: 25 });
+  const springY = useSpring(y, { stiffness: 150, damping: 25 });
 
-function RetroSun() {
+  useEffect(() => {
+    const move = (e: MouseEvent) => {
+      x.set(e.clientX);
+      y.set(e.clientY);
+    };
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, [x, y]);
+
   return (
-    <div className="absolute left-1/2 top-[15%] -translate-x-1/2">
-      <div className="relative h-[280px] w-[280px] sm:h-[350px] sm:w-[350px]">
-        {/* Sun glow */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-b from-pink/20 via-orange/10 to-transparent blur-[60px]" />
-        {/* Sun body */}
-        <div className="absolute inset-[15%] overflow-hidden rounded-full sunset-gradient opacity-60">
-          {/* Horizontal lines through sun */}
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute left-0 right-0 bg-background"
-              style={{
-                height: `${3 + i * 0.5}px`,
-                top: `${45 + i * 7}%`,
-              }}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
+    <motion.div
+      className="pointer-events-none fixed z-50 h-[500px] w-[500px] rounded-full"
+      style={{
+        x: springX,
+        y: springY,
+        translateX: "-50%",
+        translateY: "-50%",
+        background:
+          "radial-gradient(circle, rgba(255,42,109,0.04) 0%, rgba(5,217,232,0.02) 40%, transparent 70%)",
+      }}
+    />
   );
 }
 
-function HeroSection() {
+// ─── Navbar ───
+function Nav() {
+  const { data: session } = useSession();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+
+  return (
+    <motion.nav
+      className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-8 transition-all duration-500"
+      style={{ height: scrolled ? 56 : 72 }}
+    >
+      <div
+        className="absolute inset-0 border-b transition-all duration-500"
+        style={{
+          backgroundColor: scrolled ? "rgba(5,5,8,0.7)" : "transparent",
+          backdropFilter: scrolled ? "blur(40px) saturate(180%)" : "none",
+          borderColor: scrolled ? "rgba(255,255,255,0.04)" : "transparent",
+        }}
+      />
+      <span className="relative z-10 text-[13px] font-bold tracking-[0.15em] text-fg/80">
+        TRENCHD
+      </span>
+      <button
+        onClick={() => (session ? null : signIn("twitter"))}
+        className="relative z-10 rounded-full border border-fg/10 bg-fg/[0.03] px-5 py-2 text-[12px] font-medium text-fg/70 transition-all hover:bg-fg/[0.07] hover:text-fg"
+      >
+        {session ? session.user?.name : "Sign in"}
+      </button>
+    </motion.nav>
+  );
+}
+
+// ─── Section 1: Opening ───
+function Opening() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
-  const opacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.35], [0, -60]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.92]);
+  const y = useTransform(scrollYProgress, [0, 0.5], [0, -80]);
 
   return (
-    <section ref={ref} className="relative min-h-screen overflow-hidden">
-      <RetroSun />
-      <div className="grid-floor" />
-
-      <div className="relative flex min-h-screen items-center justify-center">
-        <motion.div style={{ opacity, y }} className="mx-auto max-w-4xl px-6 pt-14 text-center">
-          {/* Japanese decorative text */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.15 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="font-[family-name:var(--font-pixel)] text-[10px] tracking-[0.5em] text-pink"
-          >
-            自動取引システム
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            <h1
-              className="glitch mt-6 font-[family-name:var(--font-pixel)] text-[clamp(1.8rem,5vw,3.5rem)] leading-[1.3] text-foreground"
-              data-text="TRENCHD"
-            >
-              TRENCHD
-            </h1>
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="mt-4 text-[clamp(1rem,2.5vw,1.4rem)] font-light tracking-wide text-cyan/80"
-          >
-            Fully autonomous Solana trading
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.65 }}
-            className="mx-auto mt-4 max-w-md text-[14px] leading-relaxed text-muted"
-          >
-            Choose your strategy. Set your risk. Walk away.
-            The bot handles everything else.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.8 }}
-            className="mt-10 flex items-center justify-center gap-4"
-          >
-            <StartButton />
-            <a
-              href="#strategies"
-              className="inline-flex h-11 items-center rounded border border-cyan/20 bg-cyan/5 px-6 text-[12px] font-bold uppercase tracking-widest text-cyan transition-all hover:bg-cyan/10 hover:glow-cyan"
-            >
-              Strategies
-            </a>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1 }}
-            className="mx-auto mt-20 flex max-w-md justify-between"
-          >
-            {[
-              { value: "$2.4M+", label: "VOLUME" },
-              { value: "14ms", label: "SPEED" },
-              { value: "24/7", label: "UPTIME" },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <p className="font-mono text-2xl font-bold text-pink">{stat.value}</p>
-                <p className="mt-1 font-[family-name:var(--font-pixel)] text-[8px] tracking-widest text-muted">
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </motion.div>
-
-          {/* Scroll */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.4 }}
-            transition={{ delay: 1.5, duration: 1 }}
-            className="mt-16"
-          >
-            <motion.div
-              animate={{ y: [0, 6, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="mx-auto w-fit"
-            >
-              <span className="font-[family-name:var(--font-pixel)] text-[8px] tracking-widest text-cyan/40">
-                SCROLL
-              </span>
-              <div className="mx-auto mt-2 h-6 w-px bg-gradient-to-b from-cyan/30 to-transparent" />
-            </motion.div>
-          </motion.div>
-        </motion.div>
+    <section ref={ref} className="relative flex h-[100vh] items-center justify-center">
+      {/* Radial glow behind title */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-pink/[0.03] blur-[150px]" />
+        <div className="absolute left-[30%] top-[40%] h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan/[0.02] blur-[120px]" />
       </div>
 
-      <LiveTicker />
+      <motion.div style={{ opacity, scale, y }} className="relative text-center px-6">
+        <motion.h1
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          className="text-[clamp(3.5rem,12vw,9rem)] font-extrabold leading-[0.9] tracking-[-0.04em]"
+        >
+          <span className="block bg-gradient-to-b from-white via-fg/90 to-fg/40 bg-clip-text text-transparent">
+            trenchd
+          </span>
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.6 }}
+          className="mt-6 text-[clamp(1rem,2vw,1.25rem)] font-light tracking-wide text-muted"
+        >
+          Autonomous trading on Solana.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 0.3, y: 0 }}
+          transition={{ duration: 1, delay: 1.5 }}
+          className="mt-24"
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            className="mx-auto h-12 w-px bg-gradient-to-b from-fg/20 to-transparent"
+          />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
 
-function StartButton() {
-  const { data: session } = useSession();
+// ─── Section 2: Bold Statements ───
+function Statement({
+  children,
+  accent,
+  sub,
+  index,
+}: {
+  children: React.ReactNode;
+  accent?: string;
+  sub?: string;
+  index: number;
+}) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const progress = useSmoothProgress(scrollYProgress);
+  const opacity = useTransform(progress, [0.15, 0.35, 0.65, 0.85], [0, 1, 1, 0]);
+  const y = useTransform(progress, [0.15, 0.35, 0.65, 0.85], [60, 0, 0, -60]);
+  const scale = useTransform(progress, [0.15, 0.35, 0.65, 0.85], [0.97, 1, 1, 0.97]);
+
   return (
-    <button
-      onClick={() => (session ? null : signIn("twitter"))}
-      className="glow-pink inline-flex h-11 items-center rounded border border-pink/30 bg-pink/10 px-8 text-[12px] font-bold uppercase tracking-widest text-pink transition-all hover:bg-pink/20"
+    <section
+      ref={ref}
+      className="relative flex min-h-screen items-center justify-center px-6"
     >
-      {session ? "Dashboard" : "Get Started"}
-    </button>
-  );
-}
-
-function FeaturesSection() {
-  return (
-    <section id="features" className="relative border-t border-cyan/10 py-28">
-      <div className="mx-auto max-w-6xl px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center"
+      <motion.div style={{ opacity, y, scale }} className="max-w-4xl text-center">
+        <p
+          className="text-[clamp(2rem,5.5vw,4.2rem)] font-semibold leading-[1.15] tracking-[-0.03em]"
+          style={{ color: accent }}
         >
-          <p className="font-[family-name:var(--font-pixel)] text-[9px] tracking-[0.4em] text-pink">
-            FEATURES
+          {children}
+        </p>
+        {sub && (
+          <p className="mx-auto mt-6 max-w-lg text-[clamp(0.95rem,1.5vw,1.15rem)] font-light leading-relaxed text-muted">
+            {sub}
           </p>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-            Built for the <span className="neon-cyan text-cyan">trenches</span>
-          </h2>
-        </motion.div>
-
-        <div className="mt-16 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((f, i) => (
-            <motion.div
-              key={f.title}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-30px" }}
-              transition={{ delay: i * 0.07, duration: 0.5 }}
-              className="group rounded-lg border border-cyan/[0.07] bg-surface-light/40 p-6 transition-all duration-300 hover:border-cyan/20 hover:bg-surface-light/70"
-            >
-              <span className="text-2xl text-cyan/40 transition-all group-hover:text-cyan/70 group-hover:neon-cyan">
-                {f.icon}
-              </span>
-              <h3 className="mt-3 font-[family-name:var(--font-pixel)] text-[10px] tracking-wider text-foreground">
-                {f.title}
-              </h3>
-              <p className="mt-2 text-[13px] leading-relaxed text-muted">
-                {f.desc}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+        )}
+      </motion.div>
     </section>
   );
 }
 
-function StrategiesSection() {
+// ─── Section: Animated line ───
+function LineDivider() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const width = useTransform(scrollYProgress, [0.2, 0.5], ["0%", "100%"]);
+  const opacity = useTransform(scrollYProgress, [0.2, 0.4, 0.6, 0.8], [0, 1, 1, 0]);
+
   return (
-    <section id="strategies" className="relative border-t border-cyan/10 py-28">
-      {/* Background texture */}
-      <div className="pointer-events-none absolute inset-0 opacity-30">
-        <div className="absolute left-[10%] top-[20%] h-px w-[200px] bg-gradient-to-r from-transparent via-pink/20 to-transparent" />
-        <div className="absolute right-[15%] top-[40%] h-px w-[150px] bg-gradient-to-r from-transparent via-cyan/20 to-transparent" />
-        <div className="absolute left-[20%] bottom-[30%] h-px w-[180px] bg-gradient-to-r from-transparent via-purple/20 to-transparent" />
-      </div>
+    <div ref={ref} className="flex h-[40vh] items-center justify-center px-6">
+      <motion.div
+        style={{ width, opacity }}
+        className="h-px max-w-2xl bg-gradient-to-r from-transparent via-pink/40 to-transparent"
+      />
+    </div>
+  );
+}
 
-      <div className="relative mx-auto max-w-6xl px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center"
-        >
-          <p className="font-[family-name:var(--font-pixel)] text-[9px] tracking-[0.4em] text-pink">
-            STRATEGIES
+// ─── Section: Visual Feature ───
+function VisualBlock({
+  title,
+  body,
+  visual,
+  reverse = false,
+}: {
+  title: string;
+  body: string;
+  visual: React.ReactNode;
+  reverse?: boolean;
+}) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const progress = useSmoothProgress(scrollYProgress);
+  const opacity = useTransform(progress, [0.15, 0.35, 0.7, 0.85], [0, 1, 1, 0]);
+  const x = useTransform(
+    progress,
+    [0.15, 0.35],
+    reverse ? [-40, 0] : [40, 0]
+  );
+
+  return (
+    <section ref={ref} className="flex min-h-screen items-center justify-center px-6 py-20">
+      <motion.div
+        style={{ opacity, x }}
+        className={`mx-auto flex max-w-5xl flex-col items-center gap-16 ${
+          reverse ? "lg:flex-row-reverse" : "lg:flex-row"
+        }`}
+      >
+        <div className="flex-1 text-center lg:text-left">
+          <h3 className="text-[clamp(1.8rem,3.5vw,2.8rem)] font-semibold tracking-[-0.03em]">
+            {title}
+          </h3>
+          <p className="mt-4 max-w-md text-[16px] font-light leading-relaxed text-muted">
+            {body}
           </p>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-            Trade <span className="neon-pink text-pink">your way</span>
-          </h2>
-          <p className="mt-3 text-muted">Pick a style. Switch anytime.</p>
-        </motion.div>
-
-        <div className="mt-16 grid gap-4 sm:grid-cols-2">
-          {strategies.map((strat, i) => (
-            <motion.div
-              key={strat.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="group relative overflow-hidden rounded-lg border border-cyan/[0.07] bg-surface-light/40 p-6 transition-all duration-300 hover:border-cyan/15 hover:bg-surface-light/60"
-            >
-              {/* Corner decoration */}
-              <div className="absolute right-3 top-3 font-[family-name:var(--font-pixel)] text-[8px] text-muted/20">
-                {String(i + 1).padStart(2, "0")}
-              </div>
-
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-[family-name:var(--font-pixel)] text-[11px] tracking-wider text-foreground">
-                    {strat.name}
-                  </h3>
-                  <p className="mt-2 max-w-xs text-[13px] leading-relaxed text-muted">
-                    {strat.desc}
-                  </p>
-                </div>
-                <span className="font-mono text-2xl font-bold text-green">
-                  {strat.avg}
-                </span>
-              </div>
-
-              <div className="mt-4 h-14 opacity-60 transition-opacity group-hover:opacity-100">
-                <MiniChart seed={i + 1} color={strat.color} />
-              </div>
-
-              <div className="mt-4 flex items-center gap-6 border-t border-cyan/[0.06] pt-4 font-mono text-[11px]">
-                <span className="text-muted">
-                  RISK <span className={`font-bold ${strat.riskColor}`}>{strat.risk}</span>
-                </span>
-                <span className="text-muted">
-                  FREQ <span className="font-medium text-foreground/60">{strat.trades}</span>
-                </span>
-              </div>
-            </motion.div>
-          ))}
         </div>
-      </div>
+        <div className="flex-1">{visual}</div>
+      </motion.div>
     </section>
   );
 }
 
-function CtaSection() {
+// ─── Visual: Pulse ring ───
+function PulseRing() {
   return (
-    <section className="relative border-t border-cyan/10 py-28">
-      <div className="mx-auto max-w-6xl px-6">
+    <div className="relative flex h-[300px] w-full items-center justify-center">
+      {[1, 2, 3, 4].map((i) => (
         <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="glow-pink relative overflow-hidden rounded-xl border border-pink/15 bg-pink/[0.03] p-14 text-center sm:p-20"
-        >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,42,109,0.06)_0%,transparent_60%)]" />
+          key={i}
+          className="absolute rounded-full border border-pink/10"
+          style={{
+            width: 80 + i * 60,
+            height: 80 + i * 60,
+          }}
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: 3,
+            delay: i * 0.4,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+      <motion.div
+        className="relative z-10 h-16 w-16 rounded-full bg-gradient-to-br from-pink to-purple"
+        animate={{ scale: [1, 1.08, 1] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          boxShadow: "0 0 40px rgba(255,42,109,0.4), 0 0 80px rgba(255,42,109,0.15)",
+        }}
+      />
+    </div>
+  );
+}
 
-          {/* Corner brackets */}
-          <div className="pointer-events-none absolute left-4 top-4 h-6 w-6 border-l border-t border-pink/20" />
-          <div className="pointer-events-none absolute right-4 top-4 h-6 w-6 border-r border-t border-pink/20" />
-          <div className="pointer-events-none absolute bottom-4 left-4 h-6 w-6 border-b border-l border-pink/20" />
-          <div className="pointer-events-none absolute bottom-4 right-4 h-6 w-6 border-b border-r border-pink/20" />
+// ─── Visual: Speed lines ───
+function SpeedLines() {
+  return (
+    <div className="relative flex h-[300px] w-full items-center justify-center overflow-hidden">
+      {[...Array(12)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute h-px bg-gradient-to-r from-transparent via-cyan to-transparent"
+          style={{
+            width: 40 + Math.random() * 120,
+            top: `${15 + i * 6.5}%`,
+            left: `${Math.random() * 60}%`,
+          }}
+          animate={{
+            x: [0, 200, 0],
+            opacity: [0, 0.6, 0],
+          }}
+          transition={{
+            duration: 1.5 + Math.random(),
+            delay: i * 0.15,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+      <div className="relative z-10 font-mono text-[48px] font-bold text-cyan/80"
+        style={{ textShadow: "0 0 30px rgba(5,217,232,0.5)" }}>
+        14ms
+      </div>
+    </div>
+  );
+}
 
-          <p className="relative font-[family-name:var(--font-pixel)] text-[8px] tracking-[0.5em] text-pink/50">
-            INITIALIZE
-          </p>
-          <h2 className="relative mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-            Enter the trenches
-          </h2>
-          <p className="relative mt-3 text-muted">
-            Sign in. Pick a strategy. Let it run.
-          </p>
-          <div className="relative mt-8">
-            <CtaButton />
+// ─── Visual: Discipline bars ───
+function DisciplineBars() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "center center"],
+  });
+
+  const labels = ["Emotion", "Fatigue", "Hesitation", "FOMO", "Discipline"];
+  const humanVals = [82, 70, 65, 88, 30];
+  const botVals = [0, 0, 0, 0, 100];
+  const colors = ["#ff2a6d", "#ff2a6d", "#ff2a6d", "#ff2a6d", "#05d9e8"];
+
+  return (
+    <div ref={ref} className="w-full max-w-sm space-y-4">
+      {labels.map((label, i) => {
+        const w = useTransform(
+          scrollYProgress,
+          [0.3, 0.7],
+          [humanVals[i], botVals[i]]
+        );
+        return (
+          <div key={label}>
+            <div className="mb-1.5 flex items-center justify-between text-[13px]">
+              <span className="text-muted">{label}</span>
+              <motion.span className="font-mono text-fg/60" style={{ opacity: 1 }}>
+                <MotionPercent value={w} />
+              </motion.span>
+            </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-fg/[0.04]">
+              <motion.div
+                className="h-full rounded-full"
+                style={{
+                  width: useTransform(w, (v) => `${v}%`),
+                  backgroundColor: colors[i],
+                }}
+              />
+            </div>
           </div>
-        </motion.div>
+        );
+      })}
+      <div className="flex justify-between pt-2 text-[11px] text-muted/40">
+        <span>HUMAN</span>
+        <span>TRENCHD</span>
       </div>
+    </div>
+  );
+}
+
+function MotionPercent({ value }: { value: ReturnType<typeof useMotionValue<number>> }) {
+  const [display, setDisplay] = useState(0);
+  useMotionValueEvent(value, "change", (v: number) => setDisplay(Math.round(v)));
+  return <>{display}%</>;
+}
+
+// ─── Section: CTA ───
+function CtaSection() {
+  const { data: session } = useSession();
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "center center"],
+  });
+  const progress = useSmoothProgress(scrollYProgress);
+  const opacity = useTransform(progress, [0.2, 0.6], [0, 1]);
+  const scale = useTransform(progress, [0.2, 0.6], [0.95, 1]);
+
+  return (
+    <section ref={ref} className="relative flex min-h-[80vh] items-center justify-center px-6 pb-32">
+      <motion.div style={{ opacity, scale }} className="text-center">
+        <h2 className="text-[clamp(2.5rem,6vw,4.5rem)] font-bold tracking-[-0.04em]">
+          <span className="bg-gradient-to-r from-pink via-purple to-cyan bg-clip-text text-transparent">
+            Enter the trenches.
+          </span>
+        </h2>
+        <p className="mt-4 text-lg text-muted">
+          One click. That&apos;s all it takes.
+        </p>
+        <motion.button
+          onClick={() => (session ? null : signIn("twitter"))}
+          className="mt-10 inline-flex h-14 items-center gap-3 rounded-full px-10 text-[15px] font-semibold text-white transition-transform hover:scale-[1.03] active:scale-[0.97]"
+          style={{
+            background: "linear-gradient(135deg, #ff2a6d 0%, #8b5cf6 50%, #05d9e8 100%)",
+            boxShadow:
+              "0 0 30px rgba(255,42,109,0.25), 0 0 60px rgba(139,92,246,0.15)",
+          }}
+          whileHover={{
+            boxShadow:
+              "0 0 40px rgba(255,42,109,0.35), 0 0 80px rgba(139,92,246,0.2)",
+          }}
+        >
+          {session ? (
+            "Open Dashboard"
+          ) : (
+            <>
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+              Start Trading
+            </>
+          )}
+        </motion.button>
+      </motion.div>
     </section>
   );
 }
 
-function CtaButton() {
-  const { data: session } = useSession();
+// ─── Background color shift ───
+function BackgroundShift() {
+  const { scrollYProgress } = useScroll();
+  const bg1 = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.5, 0.7, 1],
+    [
+      "rgba(255,42,109,0)",
+      "rgba(255,42,109,0.02)",
+      "rgba(5,217,232,0.02)",
+      "rgba(139,92,246,0.02)",
+      "rgba(255,42,109,0.02)",
+    ]
+  );
+
   return (
-    <button
-      onClick={() => (session ? null : signIn("twitter"))}
-      className="glow-pink inline-flex h-11 items-center gap-2 rounded border border-pink/30 bg-pink/10 px-8 text-[12px] font-bold uppercase tracking-widest text-pink transition-all hover:bg-pink/20"
-    >
-      {session ? (
-        "Open Dashboard"
-      ) : (
-        <>
-          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current">
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-          </svg>
-          Connect with X
-        </>
-      )}
-    </button>
+    <motion.div
+      className="pointer-events-none fixed inset-0 z-0"
+      style={{ backgroundColor: bg1 }}
+    />
   );
 }
 
+// ─── Main ───
 export default function Home() {
   return (
-    <main className="scanlines">
-      <HeroSection />
-      <FeaturesSection />
-      <StrategiesSection />
-      <CtaSection />
-      <footer className="border-t border-cyan/10 py-8">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6">
-          <span className="font-[family-name:var(--font-pixel)] text-[8px] tracking-wider text-muted/30">
-            &copy; {new Date().getFullYear()} TRENCHD
-          </span>
-          <div className="flex gap-4 text-[11px] text-muted/30">
-            <a href="#" className="transition-colors hover:text-pink/50">Terms</a>
-            <a href="#" className="transition-colors hover:text-pink/50">Privacy</a>
-          </div>
-        </div>
-      </footer>
-    </main>
+    <>
+      <CursorGlow />
+      <BackgroundShift />
+      <Nav />
+      <main className="relative z-10">
+        <Opening />
+
+        <Statement
+          index={0}
+          accent="#ededf0"
+          sub="trenchd watches every token, every candle, every order book — simultaneously. It doesn't scroll Twitter for alpha. It is the alpha."
+        >
+          While you sleep, it trades.
+          <br />
+          While you think, it&apos;s already in.
+        </Statement>
+
+        <LineDivider />
+
+        <VisualBlock
+          title="Zero emotion."
+          body="No panic selling at the bottom. No FOMO buying the top. No revenge trading after a loss. trenchd executes with mechanical precision — every single time."
+          visual={<PulseRing />}
+        />
+
+        <VisualBlock
+          title="Inhuman speed."
+          body="From signal to execution in 14 milliseconds. By the time you see the opportunity, trenchd has already taken it."
+          visual={<SpeedLines />}
+          reverse
+        />
+
+        <Statement
+          index={1}
+          accent="#05d9e8"
+          sub="Every edge a human trader has, trenchd has more of it. Every weakness a human trader has, trenchd has none."
+        >
+          More disciplined than you.
+          <br />
+          And it doesn&apos;t need sleep.
+        </Statement>
+
+        <LineDivider />
+
+        <VisualBlock
+          title="Human vs. Machine."
+          body="As you scroll, watch the bars shift from human to trenchd. This is what replacing emotion with code looks like."
+          visual={<DisciplineBars />}
+        />
+
+        <Statement
+          index={2}
+          accent="#ff2a6d"
+        >
+          The market doesn&apos;t care
+          <br />
+          about your feelings.
+          <br />
+          <span className="text-muted">Neither does trenchd.</span>
+        </Statement>
+
+        <LineDivider />
+
+        <CtaSection />
+
+        <footer className="border-t border-border py-8 text-center text-[12px] text-muted/30">
+          &copy; {new Date().getFullYear()} TRENCHD
+        </footer>
+      </main>
+    </>
   );
 }
