@@ -90,7 +90,7 @@ function Hero() {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="mt-8 text-[clamp(1rem,2vw,1.3rem)] font-light tracking-wide text-slate-400"
         >
-          It&apos;s always watching. Always learning you.
+          AI-powered trading intelligence for Solana.
         </motion.p>
 
         <motion.div
@@ -127,9 +127,9 @@ function WatchingSection() {
   const y = useTransform(smooth, [0.1, 0.3, 0.7, 0.88], [80, 0, 0, -80]);
 
   const corrections = [
-    { flaw: "EXIT NOW.", fix: "You've recovered your loss from earlier. Take the win and move on — coin is starting to taper off.", delay: 0 },
-    { flaw: "Don't enter.", fix: "You always get fucked when you enter this high. Wait for a pullback or skip it entirely.", delay: 0.35 },
-    { flaw: "You just revenge traded.", fix: "Last 3 entries were within 8 minutes of a loss. Step away. I'll keep watching.", delay: 0.7 },
+    { flaw: "EXIT NOW.", fix: "You've recovered your earlier loss. Coin is tapering off — take the win and rotate.", delay: 0 },
+    { flaw: "Don't enter.", fix: "Your historical data shows a 78% loss rate entering above this level. Wait for structure.", delay: 0.35 },
+    { flaw: "Revenge trade detected.", fix: "3 entries in 8 minutes following a loss. Pattern flagged — cooling period recommended.", delay: 0.7 },
   ];
 
   return (
@@ -137,9 +137,9 @@ function WatchingSection() {
       <motion.div style={{ opacity, y }} className="w-full max-w-2xl">
         <div className="mb-14 text-center">
           <p className="text-[clamp(1.8rem,3.5vw,2.6rem)] font-semibold leading-[1.15] tracking-[-0.02em] text-slate-100">
-            It finds what you won&apos;t
+            Real-time pattern detection.
             <br />
-            <span className="text-slate-500">admit to yourself.</span>
+            <span className="text-slate-500">While you trade.</span>
           </p>
         </div>
 
@@ -186,9 +186,9 @@ function Statement() {
     <section ref={ref} className="relative flex min-h-[55vh] items-center justify-center px-6">
       <motion.div style={{ opacity, y }} className="max-w-3xl text-center">
         <p className="text-[clamp(1.8rem,4vw,3rem)] font-semibold leading-[1.2] tracking-[-0.03em] text-slate-100">
-          Your worst habit is invisible to you.
+          Most traders lose to themselves.
           <br />
-          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Not to trenchd.</span>
+          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>trenchd fixes that.</span>
         </p>
       </motion.div>
     </section>
@@ -208,7 +208,7 @@ function CtaSection() {
     <section ref={ref} className="relative flex min-h-[55vh] items-center justify-center px-6 pb-24">
       <motion.div style={{ opacity, scale }} className="text-center">
         <h2 className="text-[clamp(2.5rem,6.5vw,4.5rem)] font-black tracking-[-0.04em]">
-          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>See yourself clearly.</span>
+          <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Trade with clarity.</span>
         </h2>
 
         <motion.button
@@ -223,7 +223,7 @@ function CtaSection() {
               <svg viewBox="0 0 24 24" className="h-[14px] w-[14px] fill-current">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
-              Get Early Access
+              Join the Waitlist
             </>
           )}
         </motion.button>
