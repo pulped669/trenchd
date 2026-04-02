@@ -12,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "TRENCHD",
+  title: "TRENCH'D",
   description: "AI that watches your trades and corrects your flaws.",
 };
 
