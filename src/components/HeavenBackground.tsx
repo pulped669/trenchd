@@ -33,13 +33,13 @@ export default function HeavenBackground() {
       drift: number;
     }[] = [];
 
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 120; i++) {
       lines.push({
         y: Math.random() * 1.4 - 0.2, // normalized position, some offscreen
         amplitude: 2 + Math.random() * 12,
         frequency: 0.002 + Math.random() * 0.008,
         speed: 0.3 + Math.random() * 1.2,
-        opacity: 0.03 + Math.random() * 0.08,
+        opacity: 0.08 + Math.random() * 0.15,
         width: 0.5 + Math.random() * 1,
         phase: Math.random() * Math.PI * 2,
         drift: (Math.random() - 0.5) * 0.15, // slow vertical drift
@@ -74,32 +74,23 @@ export default function HeavenBackground() {
       const h = canvas!.height;
       time += 0.016;
 
-      // Sky gradient
+      // Sky gradient — more blue, less white
       const grad = ctx!.createLinearGradient(0, 0, 0, h);
-      grad.addColorStop(0, "#dceefb");
-      grad.addColorStop(0.3, "#e8f4fd");
-      grad.addColorStop(0.6, "#f0f7fc");
-      grad.addColorStop(1, "#f8fbfe");
+      grad.addColorStop(0, "#c4def5");
+      grad.addColorStop(0.3, "#d0e6f8");
+      grad.addColorStop(0.6, "#dceefb");
+      grad.addColorStop(1, "#e8f4fd");
       ctx!.fillStyle = grad;
       ctx!.fillRect(0, 0, w, h);
 
-      // Soft radial light sources
+      // Soft radial light sources — toned down
       const glow1 = ctx!.createRadialGradient(
         w * 0.3, h * 0.2, 0,
         w * 0.3, h * 0.2, w * 0.5
       );
-      glow1.addColorStop(0, "rgba(255, 255, 255, 0.4)");
+      glow1.addColorStop(0, "rgba(255, 255, 255, 0.15)");
       glow1.addColorStop(1, "rgba(255, 255, 255, 0)");
       ctx!.fillStyle = glow1;
-      ctx!.fillRect(0, 0, w, h);
-
-      const glow2 = ctx!.createRadialGradient(
-        w * 0.7, h * 0.15, 0,
-        w * 0.7, h * 0.15, w * 0.4
-      );
-      glow2.addColorStop(0, "rgba(255, 255, 255, 0.3)");
-      glow2.addColorStop(1, "rgba(255, 255, 255, 0)");
-      ctx!.fillStyle = glow2;
       ctx!.fillRect(0, 0, w, h);
 
       // Wave lines
@@ -107,7 +98,7 @@ export default function HeavenBackground() {
         const baseY = line.y * h + Math.sin(time * line.drift) * 20;
 
         ctx!.beginPath();
-        ctx!.strokeStyle = `rgba(180, 210, 235, ${line.opacity})`;
+        ctx!.strokeStyle = `rgba(130, 175, 210, ${line.opacity})`;
         ctx!.lineWidth = line.width;
 
         for (let x = -20; x <= w + 20; x += 3) {
@@ -125,12 +116,12 @@ export default function HeavenBackground() {
       }
 
       // A second pass of thinner, brighter lines
-      for (let i = 0; i < 25; i++) {
+      for (let i = 0; i < 40; i++) {
         const line = lines[i];
         const baseY = line.y * h + Math.sin(time * line.drift * 1.5 + 3) * 15;
 
         ctx!.beginPath();
-        ctx!.strokeStyle = `rgba(255, 255, 255, ${line.opacity * 0.8})`;
+        ctx!.strokeStyle = `rgba(255, 255, 255, ${line.opacity * 1.2})`;
         ctx!.lineWidth = line.width * 0.5;
 
         for (let x = -20; x <= w + 20; x += 3) {
