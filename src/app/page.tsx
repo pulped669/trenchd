@@ -64,7 +64,7 @@ function Nav() {
         }}
       />
       <span className="relative z-10 text-[13px] font-bold tracking-[0.2em] text-slate-400">
-        TRENCH'D
+        TRENCHD
       </span>
       <button
         onClick={() => (session ? null : signIn("twitter"))}
@@ -120,7 +120,7 @@ function Hero() {
               filter: "drop-shadow(0 0 40px rgba(99,102,241,0.15))",
             }}
           >
-            trench'd
+            trenchd
           </span>
         </motion.h1>
 
@@ -251,7 +251,7 @@ function Statement() {
               filter: "drop-shadow(0 0 20px rgba(99,102,241,0.15))",
             }}
           >
-            trench'd fixes that.
+            trenchd fixes that.
           </span>
         </p>
       </motion.div>
@@ -329,7 +329,7 @@ export default function Home() {
         <Statement />
         <CtaSection />
         <footer className="border-t border-slate-800/30 py-8 text-center text-[11px] text-slate-600 tracking-widest">
-          TRENCH'D
+          TRENCHD
         </footer>
       </main>
     </>
