@@ -7,7 +7,7 @@ export default function AuthButton() {
 
   if (status === "loading") {
     return (
-      <div className="h-9 w-24 animate-pulse rounded-full bg-white/[0.06]" />
+      <div className="h-8 w-20 animate-pulse rounded-lg bg-white/[0.04]" />
     );
   }
 
@@ -15,18 +15,16 @@ export default function AuthButton() {
     return (
       <button
         onClick={() => signOut()}
-        className="flex items-center gap-2.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-[13px] font-medium text-foreground backdrop-blur-sm transition-all hover:bg-white/[0.08]"
+        className="flex items-center gap-2 rounded-lg border border-border bg-surface-light px-3.5 py-1.5 text-[13px] font-medium text-foreground transition-all hover:bg-surface-hover"
       >
         {session.user.image && (
           <img
             src={session.user.image}
             alt=""
-            className="h-5 w-5 rounded-full"
+            className="h-4 w-4 rounded-full"
           />
         )}
-        <span className="max-w-[100px] truncate">
-          {session.user.name}
-        </span>
+        <span className="max-w-[80px] truncate">{session.user.name}</span>
       </button>
     );
   }
@@ -34,12 +32,9 @@ export default function AuthButton() {
   return (
     <button
       onClick={() => signIn("twitter")}
-      className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-5 py-2 text-[13px] font-medium text-foreground backdrop-blur-sm transition-all hover:bg-white/[0.08]"
+      className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-1.5 text-[13px] font-semibold text-white transition-all hover:bg-accent-light"
     >
-      <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-      </svg>
-      Sign in
+      Get Started
     </button>
   );
 }
