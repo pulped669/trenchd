@@ -3,10 +3,11 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import WalletProvider from "@/context/WalletProvider";
 import Navbar from "@/components/Navbar";
+import FloatingElements from "@/components/FloatingElements";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
-  variable: "--font-geist-sans",
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -25,15 +26,18 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <WalletProvider>
+          <FloatingElements />
           <Navbar />
-          {children}
+          <div className="relative z-10">{children}</div>
           <Toaster
             position="bottom-right"
             toastOptions={{
               style: {
-                background: "#111111",
-                color: "#f0f0f0",
-                border: "1px solid #1a1a1a",
+                background: "rgba(17, 17, 19, 0.9)",
+                color: "#f5f5f7",
+                border: "1px solid rgba(255,255,255,0.06)",
+                backdropFilter: "blur(20px)",
+                borderRadius: "12px",
               },
             }}
           />
