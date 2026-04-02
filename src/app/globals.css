@@ -3,21 +3,17 @@
 
 :root {
   --bg: #050508;
-  --fg: #ededf0;
-  --pink: #ff2a6d;
-  --cyan: #05d9e8;
-  --purple: #8b5cf6;
-  --muted: #55555e;
-  --surface: #0a0a10;
+  --fg: #e4e4e8;
+  --accent: #ff2a6d;
+  --muted: #5a5a65;
+  --surface: #0b0b10;
   --border: rgba(255, 255, 255, 0.05);
 }
 
 @theme inline {
   --color-bg: var(--bg);
   --color-fg: var(--fg);
-  --color-pink: var(--pink);
-  --color-cyan: var(--cyan);
-  --color-purple: var(--purple);
+  --color-accent: var(--accent);
   --color-muted: var(--muted);
   --color-surface: var(--surface);
   --color-border: var(--border);
@@ -29,10 +25,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html {
-  background: var(--bg);
-  scroll-behavior: auto;
-}
+html { background: var(--bg); }
 
 body {
   background: var(--bg);
@@ -42,7 +35,7 @@ body {
 }
 
 ::selection {
-  background: rgba(255, 42, 109, 0.3);
+  background: rgba(255, 42, 109, 0.25);
   color: #fff;
 }
 
