@@ -13,7 +13,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "TRENCHD",
-  description: "Autonomous Solana trading.",
+  description: "AI that watches your trades and corrects your flaws.",
 };
 
 export default function RootLayout({
@@ -31,9 +31,9 @@ export default function RootLayout({
             position="bottom-center"
             toastOptions={{
               style: {
-                background: "rgba(255,255,255,0.9)",
-                color: "#1a1a2e",
-                border: "1px solid rgba(0,0,0,0.06)",
+                background: "rgba(15,23,42,0.9)",
+                color: "#e2e8f0",
+                border: "1px solid rgba(148,163,184,0.08)",
                 backdropFilter: "blur(20px)",
                 borderRadius: "100px",
                 fontSize: "14px",

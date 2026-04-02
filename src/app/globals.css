@@ -2,12 +2,12 @@
 @import "@solana/wallet-adapter-react-ui/styles.css";
 
 :root {
-  --bg: #e8f4fd;
-  --fg: #1a1a2e;
+  --bg: #0b1120;
+  --fg: #e2e8f0;
   --accent: #ff2a6d;
-  --muted: #7a8a9e;
-  --surface: rgba(255, 255, 255, 0.6);
-  --border: rgba(0, 0, 0, 0.06);
+  --muted: #64748b;
+  --surface: rgba(15, 23, 42, 0.7);
+  --border: rgba(148, 163, 184, 0.08);
 }
 
 @theme inline {
@@ -25,7 +25,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html { background: #dceefb; }
+html { background: #0b1120; }
 
 body {
   background: transparent;
@@ -35,8 +35,8 @@ body {
 }
 
 ::selection {
-  background: rgba(255, 42, 109, 0.2);
-  color: #1a1a2e;
+  background: rgba(56, 189, 248, 0.2);
+  color: #f8fafc;
 }
 
 ::-webkit-scrollbar { width: 0px; }

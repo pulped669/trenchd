@@ -9,7 +9,9 @@ import {
 } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
 
-const GRADIENT = "linear-gradient(135deg, #ff2a6d 0%, #8b5cf6 50%, #05d9e8 100%)";
+// Refined gradient — starts warm, passes through blue, ends cool
+// Conveys confidence (pink) → trust (blue) → clarity (teal)
+const GRADIENT = "linear-gradient(135deg, #f472b6 0%, #6366f1 40%, #38bdf8 100%)";
 
 // ─── Nav ───
 function Nav() {
@@ -30,18 +32,18 @@ function Nav() {
       <div
         className="absolute inset-0 border-b transition-all duration-700"
         style={{
-          backgroundColor: scrolled ? "rgba(232,244,253,0.6)" : "transparent",
+          backgroundColor: scrolled ? "rgba(11,17,32,0.7)" : "transparent",
           backdropFilter: scrolled ? "blur(40px) saturate(180%)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(40px) saturate(180%)" : "none",
-          borderColor: scrolled ? "rgba(0,0,0,0.04)" : "transparent",
+          borderColor: scrolled ? "rgba(148,163,184,0.06)" : "transparent",
         }}
       />
-      <span className="relative z-10 text-[13px] font-bold tracking-[0.2em] text-fg/50">
+      <span className="relative z-10 text-[13px] font-bold tracking-[0.2em] text-slate-400">
         TRENCHD
       </span>
       <button
         onClick={() => (session ? null : signIn("twitter"))}
-        className="relative z-10 rounded-full border border-fg/[0.08] bg-white/50 px-5 py-2 text-[12px] font-medium text-fg/60 backdrop-blur-sm transition-all duration-300 hover:bg-white/70 hover:text-fg"
+        className="relative z-10 rounded-full border border-slate-700/50 bg-slate-800/40 px-5 py-2 text-[12px] font-medium text-slate-300 backdrop-blur-sm transition-all duration-300 hover:border-slate-600/50 hover:bg-slate-800/60 hover:text-slate-100"
       >
         {session ? session.user?.name : "Sign in"}
       </button>
@@ -86,7 +88,7 @@ function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-8 text-[clamp(1rem,2vw,1.3rem)] font-light tracking-wide text-muted"
+          className="mt-8 text-[clamp(1rem,2vw,1.3rem)] font-light tracking-wide text-slate-400"
         >
           It&apos;s always watching. Always learning you.
         </motion.p>
@@ -108,7 +110,7 @@ function Hero() {
           <motion.div
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="mx-auto h-16 w-px bg-gradient-to-b from-fg/10 to-transparent"
+            className="mx-auto h-16 w-px bg-gradient-to-b from-slate-500/20 to-transparent"
           />
         </motion.div>
       </motion.div>
@@ -134,10 +136,10 @@ function WatchingSection() {
     <section ref={ref} className="relative flex min-h-[90vh] items-center justify-center px-6">
       <motion.div style={{ opacity, y }} className="w-full max-w-2xl">
         <div className="mb-14 text-center">
-          <p className="text-[clamp(1.8rem,3.5vw,2.6rem)] font-semibold leading-[1.15] tracking-[-0.02em] text-fg">
+          <p className="text-[clamp(1.8rem,3.5vw,2.6rem)] font-semibold leading-[1.15] tracking-[-0.02em] text-slate-100">
             It finds what you won&apos;t
             <br />
-            <span className="text-muted">admit to yourself.</span>
+            <span className="text-slate-500">admit to yourself.</span>
           </p>
         </div>
 
@@ -149,19 +151,19 @@ function WatchingSection() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: c.delay, duration: 0.6 }}
-              className="rounded-2xl border border-border bg-white/50 backdrop-blur-md"
-              style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.04)" }}
+              className="rounded-2xl border border-slate-700/30 bg-slate-900/50 backdrop-blur-md"
+              style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)" }}
             >
               <div className="flex items-start gap-4 p-5">
                 <motion.div
-                  className="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent"
-                  style={{ boxShadow: "0 0 8px rgba(255,42,109,0.4)" }}
-                  animate={{ opacity: [0.4, 1, 0.4] }}
-                  transition={{ duration: 2, delay: i * 0.3, repeat: Infinity }}
+                  className="mt-1 h-2 w-2 shrink-0 rounded-full"
+                  style={{ background: GRADIENT, boxShadow: "0 0 8px rgba(99,102,241,0.4)" }}
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2.5, delay: i * 0.3, repeat: Infinity }}
                 />
                 <div>
                   <p className="text-[13px] font-semibold" style={{ background: GRADIENT, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{c.flaw}</p>
-                  <p className="mt-1.5 text-[13px] leading-relaxed text-fg/50">{c.fix}</p>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-slate-400">{c.fix}</p>
                 </div>
               </div>
             </motion.div>
@@ -183,7 +185,7 @@ function Statement() {
   return (
     <section ref={ref} className="relative flex min-h-[55vh] items-center justify-center px-6">
       <motion.div style={{ opacity, y }} className="max-w-3xl text-center">
-        <p className="text-[clamp(1.8rem,4vw,3rem)] font-semibold leading-[1.2] tracking-[-0.03em] text-fg">
+        <p className="text-[clamp(1.8rem,4vw,3rem)] font-semibold leading-[1.2] tracking-[-0.03em] text-slate-100">
           Your worst habit is invisible to you.
           <br />
           <span style={{ background: GRADIENT, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Not to trenchd.</span>
@@ -212,7 +214,7 @@ function CtaSection() {
         <motion.button
           onClick={() => (session ? null : signIn("twitter"))}
           className="mt-12 inline-flex h-14 items-center gap-3 rounded-full px-10 text-[15px] font-semibold text-white transition-transform hover:scale-[1.03] active:scale-[0.97]"
-          style={{ background: GRADIENT, boxShadow: "0 4px 30px rgba(255,42,109,0.2), 0 4px 60px rgba(139,92,246,0.1)" }}
+          style={{ background: GRADIENT, boxShadow: "0 4px 30px rgba(99,102,241,0.2), 0 4px 60px rgba(56,189,248,0.08)" }}
         >
           {session ? (
             "Open Dashboard"
@@ -240,7 +242,7 @@ export default function Home() {
         <WatchingSection />
         <Statement />
         <CtaSection />
-        <footer className="border-t border-border py-8 text-center text-[11px] text-muted/40 tracking-widest">
+        <footer className="border-t border-slate-800/50 py-8 text-center text-[11px] text-slate-600 tracking-widest">
           TRENCHD
         </footer>
       </main>
