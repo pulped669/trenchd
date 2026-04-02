@@ -129,9 +129,18 @@ function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5 }}
-          className="text-[clamp(3.5rem,12vw,9rem)] font-black leading-[0.85] tracking-[-0.05em] text-fg"
+          className="text-[clamp(3.5rem,12vw,9rem)] font-black leading-[0.85] tracking-[-0.05em]"
         >
-          trenchd
+          <span
+            style={{
+              background: "linear-gradient(135deg, #ff2a6d 0%, #8b5cf6 50%, #05d9e8 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            trenchd
+          </span>
         </motion.h1>
 
         <motion.p
