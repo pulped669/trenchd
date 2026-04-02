@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import SessionProvider from "@/context/SessionProvider";
+import HeavenBackground from "@/components/HeavenBackground";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
@@ -24,14 +25,16 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} antialiased`}>
       <body>
         <SessionProvider>
+          <HeavenBackground />
           {children}
           <Toaster
             position="bottom-center"
             toastOptions={{
               style: {
-                background: "#0a0a10",
-                color: "#ededf0",
-                border: "1px solid rgba(255,255,255,0.05)",
+                background: "rgba(255,255,255,0.9)",
+                color: "#1a1a2e",
+                border: "1px solid rgba(0,0,0,0.06)",
+                backdropFilter: "blur(20px)",
                 borderRadius: "100px",
                 fontSize: "14px",
                 padding: "12px 24px",
