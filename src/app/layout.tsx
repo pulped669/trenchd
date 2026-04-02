@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import WalletProvider from "@/context/WalletProvider";
+import SessionProvider from "@/context/SessionProvider";
 import Navbar from "@/components/Navbar";
 import FloatingElements from "@/components/FloatingElements";
 import { Toaster } from "react-hot-toast";
@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <WalletProvider>
+        <SessionProvider>
           <FloatingElements />
           <Navbar />
           <div className="relative z-10">{children}</div>
@@ -41,7 +41,7 @@ export default function RootLayout({
               },
             }}
           />
-        </WalletProvider>
+        </SessionProvider>
       </body>
     </html>
   );

@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useSession, signIn } from "next-auth/react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 
 export default function CreateToken() {
-  const { connected } = useWallet();
+  const { data: session } = useSession();
   const [name, setName] = useState("");
   const [ticker, setTicker] = useState("");
   const [description, setDescription] = useState("");
@@ -15,8 +15,8 @@ export default function CreateToken() {
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!connected) {
-      toast.error("Connect your wallet first");
+    if (!session) {
+      signIn("twitter");
       return;
     }
 
@@ -122,7 +122,7 @@ export default function CreateToken() {
             </div>
           </div>
 
-          {connected ? (
+          {session ? (
             <button
               type="submit"
               disabled={creating || !name || !ticker}
@@ -131,9 +131,16 @@ export default function CreateToken() {
               {creating ? "Deploying..." : "Launch Token"}
             </button>
           ) : (
-            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] py-4 text-center text-[14px] text-muted">
-              Connect your wallet to launch
-            </div>
+            <button
+              type="button"
+              onClick={() => signIn("twitter")}
+              className="flex w-full items-center justify-center gap-2.5 rounded-2xl border border-white/[0.06] bg-white/[0.03] py-4 text-[15px] font-medium text-foreground transition-all hover:bg-white/[0.06]"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+              Sign in with X to launch
+            </button>
           )}
         </form>
       </motion.div>

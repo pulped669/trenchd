@@ -1,15 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import dynamic from "next/dynamic";
-
-const WalletMultiButton = dynamic(
-  () =>
-    import("@solana/wallet-adapter-react-ui").then(
-      (mod) => mod.WalletMultiButton
-    ),
-  { ssr: false }
-);
+import AuthButton from "./AuthButton";
 
 export default function Navbar() {
   return (
@@ -28,7 +20,7 @@ export default function Navbar() {
           >
             Launch
           </Link>
-          <WalletMultiButton className="!bg-white/[0.06] !text-foreground !border !border-white/[0.08] !rounded-full !h-9 !px-5 !text-[13px] !font-medium hover:!bg-white/[0.1] !transition-all !backdrop-blur-sm" />
+          <AuthButton />
         </div>
       </div>
     </nav>
