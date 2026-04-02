@@ -91,8 +91,9 @@ function Nav() {
           borderColor: scrolled ? "rgba(255,255,255,0.03)" : "transparent",
         }}
       />
-      <span className="relative z-10 text-[13px] font-bold tracking-[0.2em] text-fg/70">
-        TRENCHD
+      <span className="relative z-10 flex items-center gap-2.5">
+        <img src="/logo.svg" alt="" className="h-6 w-auto opacity-80" />
+        <span className="text-[13px] font-bold tracking-[0.2em] text-fg/70">TRENCHD</span>
       </span>
       <button
         onClick={() => (session ? null : signIn("twitter"))}
@@ -134,26 +135,21 @@ function Hero() {
         style={{ opacity, scale, y, filter: useTransform(blur, (v) => `blur(${v}px)`) }}
         className="relative text-center px-6"
       >
-        {/* Eye icon */}
+        {/* Puppet logo */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-          className="mx-auto mb-10 flex h-16 w-16 items-center justify-center rounded-full"
-          style={{
-            background: "linear-gradient(135deg, rgba(255,42,109,0.1) 0%, rgba(139,92,246,0.1) 100%)",
-            boxShadow: "0 0 40px rgba(255,42,109,0.1), 0 0 80px rgba(139,92,246,0.05)",
-          }}
+          transition={{ duration: 1.2 }}
+          className="mx-auto mb-8"
         >
-          <motion.div
-            animate={{ scale: [1, 1.15, 1] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <svg viewBox="0 0 24 24" fill="none" className="h-7 w-7">
-              <path d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" stroke="rgba(255,42,109,0.6)" strokeWidth="1.5" />
-              <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke="rgba(255,42,109,0.6)" strokeWidth="1.5" />
-            </svg>
-          </motion.div>
+          <motion.img
+            src="/logo.svg"
+            alt=""
+            className="mx-auto h-28 w-auto sm:h-36"
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            style={{ filter: "drop-shadow(0 0 30px rgba(139,92,246,0.2)) drop-shadow(0 0 60px rgba(255,42,109,0.1))" }}
+          />
         </motion.div>
 
         <motion.h1
