@@ -62,10 +62,9 @@ export default function RootLayout({
               <div className="flex gap-12 text-[13px]">
                 <div className="space-y-3">
                   <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-fg-muted">Sections</p>
-                  <a href="/?cat=Solana" className="block text-fg-secondary transition-colors hover:text-accent">Solana</a>
-                  <a href="/?cat=Bankr" className="block text-fg-secondary transition-colors hover:text-accent">Bankr</a>
-                  <a href="/?cat=Blue+Chips" className="block text-fg-secondary transition-colors hover:text-accent">Blue Chips</a>
+                  <a href="/?cat=Memecoins" className="block text-fg-secondary transition-colors hover:text-accent">Memecoins</a>
                   <a href="/?cat=X" className="block text-fg-secondary transition-colors hover:text-accent">X</a>
+                  <a href="/?cat=On-Chain" className="block text-fg-secondary transition-colors hover:text-accent">On-Chain</a>
                 </div>
                 <div className="space-y-3">
                   <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-fg-muted">Company</p>

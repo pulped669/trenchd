@@ -5,10 +5,9 @@ import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 
 const NAV_LINKS = [
-  { label: "Solana", href: "/?cat=Solana" },
-  { label: "Bankr", href: "/?cat=Bankr" },
-  { label: "Blue Chips", href: "/?cat=Blue+Chips" },
+  { label: "Memecoins", href: "/?cat=Memecoins" },
   { label: "X", href: "/?cat=X" },
+  { label: "On-Chain", href: "/?cat=On-Chain" },
 ];
 
 export default function Navbar() {
