@@ -34,10 +34,10 @@ export default function RootLayout({
 
         {/* Newsletter */}
         <div className="border-t border-border">
-          <div className="mx-auto max-w-[1200px] px-6 py-16 text-center">
-            <p className="font-editorial text-[22px] font-bold text-fg">Stay ahead of the market</p>
-            <p className="mt-2 text-[14px] text-fg-secondary">Crypto news delivered daily. No spam, ever.</p>
-            <form className="mx-auto mt-6 flex max-w-[380px] gap-2.5">
+          <div className="mx-auto max-w-[1200px] px-4 sm:px-6 py-12 sm:py-16 text-center">
+            <p className="font-editorial text-[20px] sm:text-[22px] font-bold text-fg">Stay ahead of the market</p>
+            <p className="mt-2 text-[13px] sm:text-[14px] text-fg-secondary">Crypto news delivered daily. No spam, ever.</p>
+            <form className="mx-auto mt-5 sm:mt-6 flex flex-col sm:flex-row max-w-[380px] gap-2.5">
               <input
                 type="email"
                 placeholder="you@email.com"
@@ -51,7 +51,7 @@ export default function RootLayout({
         </div>
 
         <footer className="border-t border-border">
-          <div className="mx-auto max-w-[1200px] px-6 py-10">
+          <div className="mx-auto max-w-[1200px] px-4 sm:px-6 py-8 sm:py-10">
             <div className="flex flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <p className="font-editorial text-[20px] font-bold text-fg">trenchd</p>

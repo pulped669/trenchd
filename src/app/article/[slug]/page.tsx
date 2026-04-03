@@ -33,7 +33,7 @@ export default function ArticlePage({
   }
 
   return (
-    <main className="mx-auto max-w-[740px] px-6 py-10">
+    <main className="mx-auto max-w-[740px] px-4 sm:px-6 py-6 sm:py-10">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-[12px] font-medium text-fg-muted">
         <Link href="/" className="transition-colors hover:text-accent">Home</Link>
@@ -78,7 +78,7 @@ export default function ArticlePage({
       </div>
 
       {/* Hero image */}
-      <div className="mt-8 overflow-hidden rounded-[16px]" style={{ boxShadow: "var(--shadow-lg)" }}>
+      <div className="mt-6 sm:mt-8 overflow-hidden rounded-[12px] sm:rounded-[16px]" style={{ boxShadow: "var(--shadow-lg)" }}>
         <img
           src={article.image}
           alt={article.title}
@@ -88,7 +88,7 @@ export default function ArticlePage({
       </div>
 
       {/* Body */}
-      <article className="mt-10 space-y-6 text-[16px] leading-[1.9] text-fg-secondary">
+      <article className="mt-8 sm:mt-10 space-y-5 sm:space-y-6 text-[15px] sm:text-[16px] leading-[1.8] sm:leading-[1.9] text-fg-secondary">
         {article.body ? (
           article.body.map((p, i) => <p key={i}>{p}</p>)
         ) : (
@@ -97,9 +97,9 @@ export default function ArticlePage({
       </article>
 
       {/* Related */}
-      <section className="mt-16 border-t border-border pt-10">
+      <section className="mt-12 sm:mt-16 border-t border-border pt-8 sm:pt-10">
         <h2 className="text-[11px] font-extrabold uppercase tracking-[0.15em] text-fg-muted">Keep Reading</h2>
-        <div className="mt-6 grid gap-6 sm:grid-cols-3">
+        <div className="mt-5 sm:mt-6 grid gap-5 sm:gap-6 grid-cols-2 sm:grid-cols-3">
           {related.map((a) => (
             <Link
               key={a.slug}
@@ -115,7 +115,7 @@ export default function ArticlePage({
               </div>
               <div className="mt-3">
                 <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-accent">{a.category}</span>
-                <h3 className="font-editorial mt-1.5 text-[14.5px] font-bold leading-[1.3] text-fg transition-colors duration-200 group-hover:text-accent line-clamp-2">
+                <h3 className="font-editorial mt-1.5 text-[13px] sm:text-[14.5px] font-bold leading-[1.3] text-fg transition-colors duration-200 group-hover:text-accent line-clamp-2">
                   {a.title}
                 </h3>
               </div>

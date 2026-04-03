@@ -8,11 +8,11 @@ export default function Home() {
   const trending = [...ARTICLES].slice(0, 5);
 
   return (
-    <main className="mx-auto max-w-[1200px] px-6">
+    <main className="mx-auto max-w-[1200px] px-4 sm:px-6">
       {/* ── Lead story ── */}
-      <section className="py-8">
-        <Link href={`/article/${lead.slug}`} className="group grid gap-7 lg:grid-cols-2 lg:items-center">
-          <div className="overflow-hidden rounded-[20px]" style={{ boxShadow: "var(--shadow-hero)" }}>
+      <section className="py-6 sm:py-8">
+        <Link href={`/article/${lead.slug}`} className="group grid gap-5 sm:gap-7 lg:grid-cols-2 lg:items-center">
+          <div className="overflow-hidden rounded-[14px] sm:rounded-[20px]" style={{ boxShadow: "var(--shadow-hero)" }}>
             <img
               src={lead.image}
               alt={lead.title}
@@ -43,11 +43,11 @@ export default function Home() {
       <div className="h-px bg-border" />
 
       {/* ── Three-up row ── */}
-      <section className="py-8">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="py-6 sm:py-8">
+        <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {secondRow.map((a) => (
             <Link key={a.slug} href={`/article/${a.slug}`} className="group">
-              <div className="overflow-hidden rounded-[14px]" style={{ boxShadow: "var(--shadow-md)" }}>
+              <div className="overflow-hidden rounded-[12px] sm:rounded-[14px]" style={{ boxShadow: "var(--shadow-md)" }}>
                 <img
                   src={a.image}
                   alt={a.title}
@@ -76,7 +76,7 @@ export default function Home() {
       <div className="h-px bg-border" />
 
       {/* ── Feed + Sidebar ── */}
-      <section className="flex flex-col gap-12 py-8 lg:flex-row">
+      <section className="flex flex-col gap-10 py-6 sm:gap-12 sm:py-8 lg:flex-row">
         {/* Feed */}
         <div className="flex-1 min-w-0">
           <h2 className="mb-6 text-[11px] font-extrabold uppercase tracking-[0.15em] text-fg-muted">
