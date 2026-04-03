@@ -8,6 +8,7 @@ export interface Article {
   readTime: string;
   featured?: boolean;
   body?: string[];
+  ca?: string;
 }
 
 export const CATEGORIES = [
