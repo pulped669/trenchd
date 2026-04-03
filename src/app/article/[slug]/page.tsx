@@ -82,26 +82,12 @@ export default function ArticlePage({
       </div>
 
       {/* Article body */}
-      <article className="mt-8 space-y-6 text-[15.5px] leading-[1.85] text-fg-secondary">
-        <p>{article.excerpt}</p>
-        <h2 className="!mt-10 text-[18px] font-extrabold tracking-[-0.01em] text-fg">Key Points</h2>
-        <ul className="list-none space-y-3 pl-0">
-          <li className="flex gap-3">
-            <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-            <span>Market conditions are shifting rapidly as institutional interest grows across the sector</span>
-          </li>
-          <li className="flex gap-3">
-            <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-            <span>On-chain data supports the thesis, with accumulation patterns emerging at key levels</span>
-          </li>
-          <li className="flex gap-3">
-            <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-            <span>Traders should watch critical support and resistance levels over the coming days</span>
-          </li>
-        </ul>
-        <p>
-          This is a developing story and will be updated as more information becomes available.
-        </p>
+      <article className="mt-8 space-y-5 text-[15.5px] leading-[1.85] text-fg-secondary">
+        {article.body ? (
+          article.body.map((p, i) => <p key={i}>{p}</p>)
+        ) : (
+          <p>{article.excerpt}</p>
+        )}
       </article>
 
       {/* Related */}
