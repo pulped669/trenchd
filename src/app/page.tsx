@@ -11,8 +11,6 @@ export default function HomePage() {
         </Link>
         <nav className="topbar-nav">
           <a href="#how">How it works</a>
-          <a href="#rules">Rules</a>
-          <a href="#faq">FAQ</a>
         </nav>
         <Link href="/chat" className="topbar-cta">
           Start chatting
@@ -20,18 +18,11 @@ export default function HomePage() {
       </header>
 
       <section className="hero">
-        <p className="hero-eyebrow">
-          <span className="eyebrow-dot" /> Live now · No sign-up
-        </p>
         <h1 className="hero-title">
           Talk to a <em>stranger</em>.
           <br />
           One tap.
         </h1>
-        <p className="hero-sub">
-          Random video chat with someone, somewhere. Skip when you&apos;re done. No accounts, no
-          followers, no algorithm — just two people on a call.
-        </p>
         <div className="hero-cta-row">
           <Link href="/chat" className="cta-primary">
             <span className="cta-dot" /> Start chatting
@@ -65,36 +56,6 @@ export default function HomePage() {
         />
       </section>
 
-      <section id="rules" className="rules">
-        <h2 className="section-title">House rules</h2>
-        <ul className="rules-list">
-          <li>Be 18+. No exceptions.</li>
-          <li>Wear clothes. Stay decent.</li>
-          <li>No harassment, no hate. Skip if you don&apos;t vibe.</li>
-          <li>Don&apos;t share personal info you wouldn&apos;t shout in a bar.</li>
-          <li>Recording without consent is gross. Don&apos;t.</li>
-        </ul>
-      </section>
-
-      <section id="faq" className="faq">
-        <h2 className="section-title">Quick answers</h2>
-        <div className="faq-grid">
-          <Faq q="Is it free?" a="Yes. No account, no paywall, no ads (yet)." />
-          <Faq
-            q="Where does the video go?"
-            a="Straight to the other person. Video and audio are negotiated peer-to-peer with WebRTC. Our server only relays the handshake."
-          />
-          <Faq
-            q="Can I use my phone?"
-            a="Yes. trench'd works on any modern Chrome, Edge, Firefox, or Safari (16.4+) with a camera."
-          />
-          <Faq
-            q="Someone broke the rules?"
-            a="Hit Next to drop the connection. Reporting is shipping next."
-          />
-        </div>
-      </section>
-
       <section className="bottom-cta">
         <h2 className="bottom-cta-title">Ready to fall in?</h2>
         <p className="bottom-cta-sub">It takes about three seconds.</p>
@@ -110,10 +71,6 @@ export default function HomePage() {
         </div>
         <div className="footer-meta">
           <span>&copy; {new Date().getFullYear()} trench&apos;d</span>
-          <span className="footer-dot">·</span>
-          <a href="#rules">Rules</a>
-          <span className="footer-dot">·</span>
-          <a href="#faq">FAQ</a>
         </div>
       </footer>
     </main>
@@ -135,15 +92,6 @@ function InfoCard({ step, title, body }: { step: string; title: string; body: st
       <span className="info-step">{step}</span>
       <p className="info-title">{title}</p>
       <p className="info-body">{body}</p>
-    </div>
-  );
-}
-
-function Faq({ q, a }: { q: string; a: string }) {
-  return (
-    <div className="faq-item">
-      <p className="faq-q">{q}</p>
-      <p className="faq-a">{a}</p>
     </div>
   );
 }
