@@ -1,167 +1,138 @@
 import Link from "next/link";
-import { ARTICLES } from "@/lib/articles";
+import VideoChat from "@/components/VideoChat";
+import Logo from "@/components/Logo";
 
-export default function Home() {
-  const lead = ARTICLES[0];
-  const secondRow = ARTICLES.slice(1, 4);
-  const rest = ARTICLES.slice(4);
-  const trending = [...ARTICLES].slice(0, 5);
-
+export default function HomePage() {
   return (
-    <main className="mx-auto max-w-[1200px] px-4 sm:px-6">
-      {/* ── Lead story ── */}
-      <section className="py-6 sm:py-8">
-        <Link href={`/article/${lead.slug}`} className="group grid gap-5 sm:gap-7 lg:grid-cols-2 lg:items-center">
-          <div className="overflow-hidden rounded-[14px] sm:rounded-[20px]" style={{ boxShadow: "var(--shadow-hero)" }}>
-            <img
-              src={lead.image}
-              alt={lead.title}
-              className="aspect-[3/2] w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.03]"
-            />
-          </div>
-          <div className="max-w-lg">
-            <div className="flex items-center gap-3">
-              <span className="rounded-full bg-accent px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-white">
-                {lead.category}
-              </span>
-              <span className="text-[12px] text-fg-muted">{lead.readTime} read</span>
-            </div>
-            <h2 className="font-editorial mt-4 text-[clamp(1.6rem,3.5vw,2.4rem)] font-bold leading-[1.15] text-fg transition-colors duration-200 group-hover:text-accent">
-              {lead.title}
-            </h2>
-            <p className="mt-3 text-[15px] leading-[1.7] text-fg-secondary line-clamp-3">
-              {lead.excerpt}
-            </p>
-            <div className="mt-4 text-[12px] font-medium text-fg-muted">
-              {lead.date}
-            </div>
-          </div>
+    <main className="page">
+      <header className="topbar">
+        <Link href="/" className="brand" aria-label="trench'd home">
+          <span className="brand-mark" aria-hidden />
+          <Logo className="brand-text" />
         </Link>
-      </section>
+        <nav className="topbar-nav">
+          <a href="#how">How it works</a>
+          <a href="#rules">Rules</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <a href="#chat" className="topbar-cta">
+          Jump in
+        </a>
+      </header>
 
-      {/* ── Divider ── */}
-      <div className="h-px bg-border" />
-
-      {/* ── Three-up row ── */}
-      <section className="py-6 sm:py-8">
-        <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {secondRow.map((a) => (
-            <Link key={a.slug} href={`/article/${a.slug}`} className="group">
-              <div className="overflow-hidden rounded-[12px] sm:rounded-[14px]" style={{ boxShadow: "var(--shadow-md)" }}>
-                <img
-                  src={a.image}
-                  alt={a.title}
-                  className="aspect-[16/10] w-full object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.04]"
-                />
-              </div>
-              <div className="mt-4">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-accent">{a.category}</span>
-                  <span className="h-px w-3 bg-border" />
-                  <span className="text-[11px] text-fg-muted">{a.readTime}</span>
-                </div>
-                <h3 className="font-editorial mt-2 text-[17px] font-bold leading-[1.3] text-fg transition-colors duration-200 group-hover:text-accent">
-                  {a.title}
-                </h3>
-                <p className="mt-1.5 text-[13px] leading-[1.6] text-fg-secondary line-clamp-2">
-                  {a.excerpt}
-                </p>
-              </div>
-            </Link>
-          ))}
+      <section className="hero">
+        <p className="hero-eyebrow">
+          <span className="eyebrow-dot" /> Random video chat · No sign-up
+        </p>
+        <h1 className="hero-title">
+          Get pulled into the <em>trench</em>.
+          <br />
+          Talk to a stranger.
+        </h1>
+        <p className="hero-sub">
+          One tap drops you into a face-to-face chat with someone you&apos;ve never met.
+          Don&apos;t click. Skip. Find your person.
+        </p>
+        <div className="hero-stats">
+          <Stat label="P2P encrypted" value="WebRTC" />
+          <Stat label="Median match" value="< 3s" />
+          <Stat label="Sign-ups" value="zero" />
         </div>
       </section>
 
-      {/* ── Divider ── */}
-      <div className="h-px bg-border" />
-
-      {/* ── Feed + Sidebar ── */}
-      <section className="flex flex-col gap-10 py-6 sm:gap-12 sm:py-8 lg:flex-row">
-        {/* Feed */}
-        <div className="flex-1 min-w-0">
-          <h2 className="mb-6 text-[11px] font-extrabold uppercase tracking-[0.15em] text-fg-muted">
-            More Stories
-          </h2>
-
-          <div className="divide-y divide-border">
-            {rest.map((a) => (
-              <Link
-                key={a.slug}
-                href={`/article/${a.slug}`}
-                className="group flex gap-6 py-6 first:pt-0 last:pb-0"
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-accent">{a.category}</span>
-                    <span className="h-px w-3 bg-border" />
-                    <span className="text-[11px] text-fg-muted">{a.date}</span>
-                  </div>
-                  <h3 className="font-editorial mt-2 text-[17px] font-bold leading-[1.3] text-fg transition-colors duration-200 group-hover:text-accent">
-                    {a.title}
-                  </h3>
-                  <p className="mt-1.5 text-[13px] leading-[1.6] text-fg-secondary line-clamp-2">
-                    {a.excerpt}
-                  </p>
-                </div>
-                <div className="hidden h-[100px] w-[150px] shrink-0 overflow-hidden rounded-[12px] sm:block" style={{ boxShadow: "var(--shadow-sm)" }}>
-                  <img
-                    src={a.image}
-                    alt=""
-                    className="h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.05]"
-                  />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Sidebar */}
-        <aside className="w-full shrink-0 lg:w-[300px]">
-          <div className="lg:sticky lg:top-[72px] space-y-6">
-            {/* Trending */}
-            <div>
-              <h3 className="mb-5 text-[11px] font-extrabold uppercase tracking-[0.15em] text-fg-muted">
-                Trending
-              </h3>
-              <div className="divide-y divide-border">
-                {trending.map((a, i) => (
-                  <Link
-                    key={a.slug}
-                    href={`/article/${a.slug}`}
-                    className="group flex items-start gap-4 py-4 first:pt-0 last:pb-0"
-                  >
-                    <span className="font-editorial mt-[2px] text-[28px] font-bold leading-none text-accent/10">
-                      {i + 1}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-accent">{a.category}</span>
-                      <p className="mt-1 text-[13.5px] font-semibold leading-[1.4] text-fg transition-colors duration-200 group-hover:text-accent line-clamp-2">
-                        {a.title}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Newsletter inline */}
-            <div className="rounded-[16px] border border-accent/15 bg-accent-surface p-6">
-              <p className="font-editorial text-[17px] font-bold text-fg">Don&apos;t miss a story</p>
-              <p className="mt-1.5 text-[13px] leading-[1.6] text-fg-secondary">The best crypto stories, delivered daily.</p>
-              <form className="mt-4 space-y-2.5">
-                <input
-                  type="email"
-                  placeholder="you@email.com"
-                  className="w-full rounded-[10px] border border-border bg-bg px-3.5 py-2.5 text-[13px] text-fg placeholder-fg-muted outline-none transition-all duration-200 focus:border-accent focus:ring-2 focus:ring-accent/10"
-                />
-                <button className="w-full rounded-[10px] bg-accent py-2.5 text-[13px] font-bold text-white transition-all duration-200 hover:bg-accent-light active:scale-[0.98]">
-                  Subscribe
-                </button>
-              </form>
-            </div>
-          </div>
-        </aside>
+      <section id="chat" className="chat-anchor">
+        <VideoChat />
       </section>
+
+      <section id="how" className="info-grid">
+        <InfoCard
+          step="01"
+          title="Hit start"
+          body="We ask for your camera and microphone, then drop you into the matchmaking queue."
+        />
+        <InfoCard
+          step="02"
+          title="Meet a stranger"
+          body="The first person waiting gets paired with you. Video and audio flow peer-to-peer."
+        />
+        <InfoCard
+          step="03"
+          title="Skip or stay"
+          body="Use Next to bounce, or open the side chat to keep talking. Vibe = up to you."
+        />
+      </section>
+
+      <section id="rules" className="rules">
+        <h2 className="rules-title">House rules</h2>
+        <ul className="rules-list">
+          <li>Be 18+. No exceptions.</li>
+          <li>Wear clothes. Stay decent. Anyone exposing themselves gets cut.</li>
+          <li>No harassment, no hate. Skip people you don&apos;t vibe with.</li>
+          <li>Don&apos;t share personal info you wouldn&apos;t shout in a bar.</li>
+          <li>Recording without consent is gross. Don&apos;t.</li>
+        </ul>
+      </section>
+
+      <section id="faq" className="faq">
+        <h2 className="faq-title">Quick answers</h2>
+        <div className="faq-grid">
+          <Faq q="Is it free?" a="Yes. No account, no paywall, no ads (yet)." />
+          <Faq
+            q="Where does the video go?"
+            a="Straight to the other person. Video and audio are negotiated peer-to-peer with WebRTC. Our server only relays the handshake."
+          />
+          <Faq
+            q="Can I use my phone?"
+            a="Yes. trench'd works on any modern Chrome, Edge, Firefox, or Safari (16.4+) with a camera."
+          />
+          <Faq
+            q="What if someone breaks the rules?"
+            a="Hit Next to immediately drop the connection. We're shipping reporting next."
+          />
+        </div>
+      </section>
+
+      <footer className="site-footer">
+        <div className="footer-row">
+          <Logo className="footer-brand" />
+          <p className="footer-tag">Random video chat. Built fresh.</p>
+        </div>
+        <div className="footer-meta">
+          <span>&copy; {new Date().getFullYear()} trench&apos;d</span>
+          <span className="footer-dot">·</span>
+          <a href="#rules">Rules</a>
+          <span className="footer-dot">·</span>
+          <a href="#faq">FAQ</a>
+        </div>
+      </footer>
     </main>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="stat">
+      <span className="stat-value">{value}</span>
+      <span className="stat-label">{label}</span>
+    </div>
+  );
+}
+
+function InfoCard({ step, title, body }: { step: string; title: string; body: string }) {
+  return (
+    <div className="info-card">
+      <span className="info-step">{step}</span>
+      <p className="info-title">{title}</p>
+      <p className="info-body">{body}</p>
+    </div>
+  );
+}
+
+function Faq({ q, a }: { q: string; a: string }) {
+  return (
+    <div className="faq-item">
+      <p className="faq-q">{q}</p>
+      <p className="faq-a">{a}</p>
+    </div>
   );
 }
