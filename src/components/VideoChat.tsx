@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Logo from "./Logo";
 
 type Status =
   | "idle"
@@ -44,13 +46,14 @@ function makeId() {
 
 export default function VideoChat() {
   const [status, setStatus] = useState<Status>("idle");
-  const [statusText, setStatusText] = useState("Tap start to find someone.");
+  const [statusText, setStatusText] = useState("Ready when you are.");
   const [stats, setStats] = useState({ online: 0, waiting: 0 });
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState("");
   const [muted, setMuted] = useState(false);
   const [cameraOff, setCameraOff] = useState(false);
-  const [chatOpen, setChatOpen] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [unread, setUnread] = useState(0);
 
   const userIdRef = useRef<string | null>(null);
   const peerIdRef = useRef<string | null>(null);
@@ -64,6 +67,7 @@ export default function VideoChat() {
   const pendingIceRef = useRef<RTCIceCandidateInit[]>([]);
   const chatScrollRef = useRef<HTMLDivElement | null>(null);
   const nextPeerFnRef = useRef<() => void>(() => {});
+  const chatOpenRef = useRef(false);
 
   const send = useCallback(async (kind: "signal" | "chat", payload: unknown) => {
     const from = userIdRef.current;
@@ -78,6 +82,9 @@ export default function VideoChat() {
 
   const addMessage = useCallback((m: Omit<ChatMessage, "id">) => {
     setMessages((prev) => [...prev, { ...m, id: makeId() }]);
+    if (m.from === "them" && !chatOpenRef.current) {
+      setUnread((u) => u + 1);
+    }
   }, []);
 
   const teardownPeer = useCallback(() => {
@@ -116,7 +123,7 @@ export default function VideoChat() {
       const st = pc.connectionState;
       if (st === "connected") {
         setStatus("in-call");
-        setStatusText("Connected. Say hi.");
+        setStatusText("Connected.");
       } else if (st === "failed") {
         setStatusText("Connection lost. Skipping…");
         nextPeerFnRef.current();
@@ -173,7 +180,7 @@ export default function VideoChat() {
   const startMatching = useCallback(async () => {
     if (!userIdRef.current) return;
     setStatus("waiting");
-    setStatusText("Searching for a stranger…");
+    setStatusText("Searching…");
     setMessages([]);
     await fetch("/api/match", {
       method: "POST",
@@ -188,7 +195,7 @@ export default function VideoChat() {
       sessionIdRef.current = ev.sessionId;
       roleRef.current = ev.role;
       setStatus("matched");
-      setStatusText("Matched. Connecting video…");
+      setStatusText("Matched. Connecting…");
       teardownPeer();
       const pc = setupPeerConnection();
       if (ev.role === "offerer") {
@@ -241,13 +248,14 @@ export default function VideoChat() {
     peerIdRef.current = null;
     sessionIdRef.current = null;
     setMessages([]);
+    setChatOpen(false);
     setStatus("idle");
-    setStatusText("Tap start to find someone.");
+    setStatusText("Ready when you are.");
   }, [teardownPeer]);
 
   const start = useCallback(async () => {
     setStatus("requesting-media");
-    setStatusText("Asking for camera & microphone…");
+    setStatusText("Asking for camera & mic…");
     let stream: MediaStream;
     try {
       stream = await navigator.mediaDevices.getUserMedia({
@@ -256,7 +264,7 @@ export default function VideoChat() {
       });
     } catch {
       setStatus("error");
-      setStatusText("Camera and microphone access is required.");
+      setStatusText("Camera & mic access is required to chat.");
       return;
     }
     localStreamRef.current = stream;
@@ -264,7 +272,7 @@ export default function VideoChat() {
       localVideoRef.current.srcObject = stream;
     }
     setStatus("connecting");
-    setStatusText("Connecting to the trench…");
+    setStatusText("Connecting…");
 
     const es = new EventSource("/api/signal");
     eventSourceRef.current = es;
@@ -339,6 +347,15 @@ export default function VideoChat() {
     });
   }, []);
 
+  const toggleChat = useCallback(() => {
+    setChatOpen((v) => {
+      const next = !v;
+      chatOpenRef.current = next;
+      if (next) setUnread(0);
+      return next;
+    });
+  }, []);
+
   useEffect(() => {
     return () => {
       if (eventSourceRef.current) eventSourceRef.current.close();
@@ -351,128 +368,138 @@ export default function VideoChat() {
     if (chatScrollRef.current) {
       chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, chatOpen]);
 
-  const live = status !== "idle" && status !== "ended" && status !== "error";
+  const live = status !== "idle" && status !== "error";
+  const showStartScreen = !live;
 
-  const headline = useMemo(() => {
+  const overlayHeadline = useMemo(() => {
     switch (status) {
-      case "idle":
-        return "Drop in. Meet a stranger.";
       case "requesting-media":
-        return "Hold tight — checking your camera.";
+        return "Checking your camera…";
       case "connecting":
-        return "Hooking you into the network…";
+        return "Hooking into the network…";
       case "waiting":
         return "Searching the trench…";
       case "matched":
         return "Match found.";
       case "in-call":
-        return "You’re live with a stranger.";
-      case "ended":
-        return "Session ended.";
-      case "error":
-        return "Something went sideways.";
+        return "";
+      default:
+        return "";
     }
   }, [status]);
 
   return (
-    <div className="chat-shell">
-      <div className="chat-stage">
-        <div className="video-grid">
-          <div className={`video-tile remote ${status === "in-call" ? "is-live" : ""}`}>
-            <video
-              ref={remoteVideoRef}
-              autoPlay
-              playsInline
-              className="video-el"
-            />
-            {status !== "in-call" && (
-              <div className="video-overlay">
-                <div className="overlay-pulse" />
-                <p className="overlay-headline">{headline}</p>
-                <p className="overlay-sub">{statusText}</p>
-              </div>
-            )}
-            <div className="video-tag">stranger</div>
-          </div>
-          <div className="video-tile local">
-            <video
-              ref={localVideoRef}
-              autoPlay
-              playsInline
-              muted
-              className={`video-el ${cameraOff ? "is-off" : ""}`}
-            />
-            {cameraOff && (
-              <div className="video-off-pill">camera off</div>
-            )}
-            <div className="video-tag">you</div>
-          </div>
-        </div>
-
-        <div className="control-bar">
-          {!live && (
-            <button className="btn btn-primary" onClick={start}>
-              <span className="btn-dot" />
-              Start chatting
-            </button>
-          )}
-          {live && (
-            <>
-              <button className="btn btn-ghost" onClick={toggleMute} aria-pressed={muted}>
-                {muted ? "Unmute" : "Mute"}
-              </button>
-              <button className="btn btn-ghost" onClick={toggleCamera} aria-pressed={cameraOff}>
-                {cameraOff ? "Camera on" : "Camera off"}
-              </button>
-              <button className="btn btn-primary" onClick={skip}>
-                Next stranger →
-              </button>
-              <button className="btn btn-danger" onClick={stop}>
-                End
-              </button>
-              <button
-                className="btn btn-ghost mobile-chat-toggle"
-                onClick={() => setChatOpen((v) => !v)}
-                aria-pressed={chatOpen}
-              >
-                {chatOpen ? "Hide chat" : "Show chat"}
-              </button>
-            </>
-          )}
-        </div>
-        <div className="status-line">
-          <span className="status-dot" data-state={status} />
-          <span>{statusText}</span>
-          <span className="status-stats">
-            {stats.online.toLocaleString()} online · {stats.waiting.toLocaleString()} waiting
+    <div className="chat-root">
+      <header className="chat-top">
+        <Link href="/" className="brand chat-brand" aria-label="trench'd home">
+          <span className="brand-mark" aria-hidden />
+          <Logo className="brand-text" />
+        </Link>
+        <div className="chat-stats" aria-live="polite">
+          <span className="stats-pulse" />
+          <span>
+            <strong>{stats.online.toLocaleString()}</strong> online
+          </span>
+          <span className="stats-sep">·</span>
+          <span>
+            <strong>{stats.waiting.toLocaleString()}</strong> waiting
           </span>
         </div>
+        <Link href="/" onClick={stop} className="chat-exit" aria-label="Exit">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden>
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </Link>
+      </header>
+
+      <div className="stage">
+        {showStartScreen ? (
+          <StartScreen status={status} statusText={statusText} onStart={start} />
+        ) : (
+          <>
+            <video ref={remoteVideoRef} autoPlay playsInline className="remote-video" />
+            {status !== "in-call" && (
+              <div className="searching">
+                <div className="searching-pulse" />
+                <p className="searching-headline">{overlayHeadline}</p>
+                <p className="searching-sub">{statusText}</p>
+              </div>
+            )}
+            <div className="local-pip">
+              <video
+                ref={localVideoRef}
+                autoPlay
+                playsInline
+                muted
+                className={`local-video ${cameraOff ? "is-off" : ""}`}
+              />
+              {cameraOff && <div className="local-off">camera off</div>}
+            </div>
+          </>
+        )}
       </div>
 
-      <aside className={`chat-side ${chatOpen ? "is-open" : ""}`}>
-        <div className="chat-header">
-          <div>
-            <p className="chat-title">Side chat</p>
-            <p className="chat-sub">Text the stranger you&apos;re with.</p>
-          </div>
+      {live && (
+        <div className="dock" role="toolbar" aria-label="Call controls">
+          <DockButton
+            label={muted ? "Unmute" : "Mute"}
+            pressed={muted}
+            onClick={toggleMute}
+            icon={muted ? <IconMicOff /> : <IconMic />}
+          />
+          <DockButton
+            label={cameraOff ? "Camera on" : "Camera off"}
+            pressed={cameraOff}
+            onClick={toggleCamera}
+            icon={cameraOff ? <IconCamOff /> : <IconCam />}
+          />
+          <button className="dock-next" onClick={skip} aria-label="Next stranger">
+            <IconSkip />
+            <span>Next</span>
+          </button>
+          <DockButton
+            label={chatOpen ? "Close chat" : "Open chat"}
+            pressed={chatOpen}
+            onClick={toggleChat}
+            icon={
+              <span className="dock-chat-icon">
+                <IconChat />
+                {unread > 0 && !chatOpen && <span className="dock-badge">{Math.min(unread, 9)}</span>}
+              </span>
+            }
+          />
+          <DockButton label="End" onClick={stop} icon={<IconHang />} variant="danger" />
         </div>
-        <div className="chat-messages" ref={chatScrollRef}>
+      )}
+
+      <aside className={`drawer ${chatOpen ? "is-open" : ""}`} aria-hidden={!chatOpen}>
+        <div className="drawer-head">
+          <div>
+            <p className="drawer-title">Side chat</p>
+            <p className="drawer-sub">Messages stay between you two.</p>
+          </div>
+          <button className="drawer-close" onClick={toggleChat} aria-label="Close">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden>
+              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+        <div className="drawer-messages" ref={chatScrollRef}>
           {messages.length === 0 && (
-            <div className="chat-empty">
-              <p>Messages stay between the two of you.</p>
-              <p className="chat-empty-sub">Once you&apos;re matched, type below.</p>
+            <div className="drawer-empty">
+              <p>{status === "in-call" ? "Type below to break the ice." : "Match first, then chat."}</p>
             </div>
           )}
           {messages.map((m) => (
-            <div key={m.id} className={`chat-bubble from-${m.from}`}>
+            <div key={m.id} className={`bubble from-${m.from}`}>
               {m.text}
             </div>
           ))}
         </div>
         <form
-          className="chat-input"
+          className="drawer-input"
           onSubmit={(e) => {
             e.preventDefault();
             sendChat(draft);
@@ -480,17 +507,184 @@ export default function VideoChat() {
         >
           <input
             type="text"
-            placeholder={status === "in-call" ? "Say something…" : "Match first…"}
+            placeholder={status === "in-call" ? "Say something…" : "Waiting for match…"}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             disabled={status !== "in-call"}
             maxLength={500}
           />
-          <button type="submit" disabled={status !== "in-call" || !draft.trim()}>
-            Send
+          <button type="submit" disabled={status !== "in-call" || !draft.trim()} aria-label="Send">
+            <IconSend />
           </button>
         </form>
       </aside>
+      {chatOpen && <button className="drawer-scrim" onClick={toggleChat} aria-label="Close chat" />}
     </div>
+  );
+}
+
+function DockButton({
+  label,
+  icon,
+  onClick,
+  pressed,
+  variant,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  onClick: () => void;
+  pressed?: boolean;
+  variant?: "danger";
+}) {
+  return (
+    <button
+      className={`dock-btn ${variant ? `dock-btn-${variant}` : ""}`}
+      onClick={onClick}
+      aria-pressed={pressed}
+      aria-label={label}
+      title={label}
+    >
+      {icon}
+    </button>
+  );
+}
+
+function StartScreen({
+  status,
+  statusText,
+  onStart,
+}: {
+  status: Status;
+  statusText: string;
+  onStart: () => void;
+}) {
+  return (
+    <div className="start-card">
+      <div className="start-orb" aria-hidden />
+      <p className="start-eyebrow">
+        <span /> No sign-up · Stranger video
+      </p>
+      <h1 className="start-title">Drop into the trench.</h1>
+      <p className="start-sub">
+        Hit start to share your camera and get matched with a random stranger. Skip anytime.
+      </p>
+      <button className="start-btn" onClick={onStart} disabled={status === "requesting-media"}>
+        {status === "requesting-media" ? "Asking permission…" : "Start chatting"}
+      </button>
+      {status === "error" && <p className="start-error">{statusText}</p>}
+      <p className="start-fine">By starting you agree to the house rules. Be 18+. Be decent.</p>
+    </div>
+  );
+}
+
+function IconMic() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden>
+      <path
+        d="M12 4a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V7a3 3 0 0 0-3-3Zm7 9a7 7 0 0 1-14 0M12 20v3"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  );
+}
+function IconMicOff() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden>
+      <path
+        d="M9 9v4a3 3 0 0 0 5 2.2M15 11.2V7a3 3 0 0 0-5.7-1.3M19 13a7 7 0 0 1-11.5 5.4M12 20v3M4 4l16 16"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  );
+}
+function IconCam() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden>
+      <path
+        d="M3 7.5A1.5 1.5 0 0 1 4.5 6h11A1.5 1.5 0 0 1 17 7.5v9A1.5 1.5 0 0 1 15.5 18h-11A1.5 1.5 0 0 1 3 16.5v-9Zm14 2 4-2.5v11l-4-2.5"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  );
+}
+function IconCamOff() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden>
+      <path
+        d="M17 9.5 21 7v10l-4-2.5M3 7.5A1.5 1.5 0 0 1 4.5 6H10M17 12v4.5A1.5 1.5 0 0 1 15.5 18h-11A1.5 1.5 0 0 1 3 16.5V11M4 4l16 16"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  );
+}
+function IconSkip() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden>
+      <path
+        d="M5 5l9 7-9 7V5Zm12 0v14"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  );
+}
+function IconChat() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden>
+      <path
+        d="M4 5h16v11H8l-4 4V5Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  );
+}
+function IconHang() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden>
+      <path
+        d="M3 14c4-4 14-4 18 0l-2 2-3-1.5V12c-2.5-1-5.5-1-8 0v2.5L5 16l-2-2Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+        fill="currentColor"
+        fillOpacity="0.15"
+      />
+    </svg>
+  );
+}
+function IconSend() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden>
+      <path
+        d="M4 12 21 4l-4 17-4-7-9-2Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
   );
 }
