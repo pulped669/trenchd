@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "@fontsource-variable/source-serif-4";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --bg: #fafafa;
   --bg-secondary: #f0f0f2;
